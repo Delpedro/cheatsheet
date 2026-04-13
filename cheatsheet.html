@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedro's Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0f1117;
+    --bg2:      #161b27;
+    --bg3:      #1c2333;
+    --border:   #2a3245;
+    --border2:  #364060;
+    --green:    #4ade80;
+    --green2:   #86efac;
+    --green-bg: rgba(74,222,128,0.06);
+    --blue:     #60a5fa;
+    --blue-bg:  rgba(96,165,250,0.06);
+    --amber:    #fbbf24;
+    --amber-bg: rgba(251,191,36,0.06);
+    --red:      #f87171;
+    --red-bg:   rgba(248,113,113,0.06);
+    --purple:   #a78bfa;
+    --purple-bg:rgba(167,139,250,0.06);
+    --text:     #e2e8f0;
+    --text2:    #94a3b8;
+    --text3:    #4a5568;
+    --mono:     'JetBrains Mono', monospace;
+    --sans:     'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 2.5rem 2rem 0;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+
+  .header-left h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .header-left h1 span { color: var(--green); }
+
+  .header-left p {
+    font-size: 13px;
+    color: var(--text3);
+    margin-top: 3px;
+    font-family: var(--mono);
+  }
+
+  .last-updated {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+    text-align: right;
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 680px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  /* ── SECTION CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  /* ── COMMAND ROW ── */
+  .cmd-row {
+    padding: 0.75rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .cmd-row:last-child { border-bottom: none; }
+
+  .cmd-row:hover { background: rgba(255,255,255,0.02); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--green2);
+    background: rgba(74,222,128,0.07);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    word-break: break-all;
+  }
+
+  .cmd-desc {
+    font-size: 12px;
+    color: var(--text2);
+    padding-left: 2px;
+  }
+
+  .cmd-desc strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* colour variants */
+  .blue code   { color: #93c5fd; background: var(--blue-bg); }
+  .amber code  { color: #fcd34d; background: var(--amber-bg); }
+  .red code    { color: #fca5a5; background: var(--red-bg); }
+  .purple code { color: #c4b5fd; background: var(--purple-bg); }
+
+  /* ── FULL WIDTH ── */
+  .full { grid-column: 1 / -1; }
+
+  /* ── TIPS SECTION ── */
+  .tip-row {
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .tip-row:last-child { border-bottom: none; }
+  .tip-icon { color: var(--amber); flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+  .tip-row strong { color: var(--text); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--text3);
+    font-family: var(--mono);
+    border-top: 1px solid var(--border);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Pedro's <span>Cheat Sheet</span></h1>
+    <p>// terminal · git · vs code — updated as we go</p>
+  </div>
+  <div class="last-updated">last updated<br>April 2026</div>
+</header>
+
+<main>
+
+  <!-- NAVIGATION -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot" style="background:#4ade80;"></div>
+      <span class="card-title">Navigation</span>
+    </div>
+    <div class="cmd-row">
+      <code>dir</code>
+      <span class="cmd-desc">List files in current folder (Windows)</span>
+    </div>
+    <div class="cmd-row">
+      <code>ls</code>
+      <span class="cmd-desc">List files in current folder (Mac/Linux style)</span>
+    </div>
+    <div class="cmd-row">
+      <code>cd ..</code>
+      <span class="cmd-desc">Go up one folder level</span>
+    </div>
+    <div class="cmd-row">
+      <code>cd FolderName</code>
+      <span class="cmd-desc">Go into a folder</span>
+    </div>
+    <div class="cmd-row">
+      <code>cd "Claude Docs\Genesys"</code>
+      <span class="cmd-desc">Go into a folder with spaces in the name — use quotes</span>
+    </div>
+    <div class="cmd-row">
+      <code>code .</code>
+      <span class="cmd-desc">Open current folder in VS Code</span>
+    </div>
+  </div>
+
+  <!-- GIT BASICS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot" style="background:#60a5fa;"></div>
+      <span class="card-title">Git — Basics</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>git status</code>
+      <span class="cmd-desc">See what files have changed</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>git add .</code>
+      <span class="cmd-desc">Stage all changes ready to commit</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>git commit -m "your message"</code>
+      <span class="cmd-desc">Save a snapshot with a description</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>git push</code>
+      <span class="cmd-desc">Send commits to GitHub</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>git pull</code>
+      <span class="cmd-desc">Get latest changes from GitHub</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>git log --oneline</code>
+      <span class="cmd-desc">See recent commits as a clean list</span>
+    </div>
+  </div>
+
+  <!-- GIT — CLONING & SETUP -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot" style="background:#a78bfa;"></div>
+      <span class="card-title">Git — Cloning &amp; Setup</span>
+    </div>
+    <div class="cmd-row purple">
+      <code>git clone https://github.com/USER/REPO.git</code>
+      <span class="cmd-desc">Clone a repo into a new folder</span>
+    </div>
+    <div class="cmd-row purple">
+      <code>git clone https://github.com/USER/REPO.git .</code>
+      <span class="cmd-desc">Clone into the <strong>current</strong> folder (note the dot)</span>
+    </div>
+    <div class="cmd-row purple">
+      <code>git init</code>
+      <span class="cmd-desc">Initialise a new Git repo in current folder</span>
+    </div>
+    <div class="cmd-row purple">
+      <code>git remote add origin URL</code>
+      <span class="cmd-desc">Connect local folder to a GitHub repo</span>
+    </div>
+    <div class="cmd-row purple">
+      <code>git fetch</code>
+      <span class="cmd-desc">Download repo history without changing files</span>
+    </div>
+    <div class="cmd-row purple">
+      <code>git reset --hard origin/main</code>
+      <span class="cmd-desc">Force local files to match GitHub — use with care</span>
+    </div>
+  </div>
+
+  <!-- GIT — BRANCHES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot" style="background:#fbbf24;"></div>
+      <span class="card-title">Git — Branches</span>
+    </div>
+    <div class="cmd-row amber">
+      <code>git branch</code>
+      <span class="cmd-desc">See all branches, current one is highlighted</span>
+    </div>
+    <div class="cmd-row amber">
+      <code>git checkout main</code>
+      <span class="cmd-desc">Switch to the main branch</span>
+    </div>
+    <div class="cmd-row amber">
+      <code>git merge master</code>
+      <span class="cmd-desc">Merge master into current branch</span>
+    </div>
+    <div class="cmd-row amber">
+      <code>git push origin main</code>
+      <span class="cmd-desc">Push main branch to GitHub</span>
+    </div>
+    <div class="cmd-row amber">
+      <code>git branch -d master</code>
+      <span class="cmd-desc">Delete the master branch locally (after merging)</span>
+    </div>
+    <div class="cmd-row amber">
+      <code>git push origin --delete master</code>
+      <span class="cmd-desc">Delete master branch on GitHub too</span>
+    </div>
+  </div>
+
+  <!-- MY REPOS -->
+  <div class="card full">
+    <div class="card-header">
+      <div class="card-dot" style="background:#f87171;"></div>
+      <span class="card-title">My Repos</span>
+    </div>
+    <div class="cmd-row red">
+      <code>cd "C:\Users\User\Desktop\Claude Docs\crimsonDel"</code>
+      <span class="cmd-desc"><strong>crimsonDel</strong> — Crimson Desert gear index · github.com/Delpedro/crimsonDel</span>
+    </div>
+    <div class="cmd-row red">
+      <code>cd "C:\Users\User\Desktop\Claude Docs\Fitness"</code>
+      <span class="cmd-desc"><strong>Fitness</strong> — Fitness app · dels-montage repo</span>
+    </div>
+    <div class="cmd-row red">
+      <code>cd "C:\Users\User\Desktop\Claude Docs\Genesys"</code>
+      <span class="cmd-desc"><strong>Genesys / sn-prep</strong> — ServiceNow interview prep · github.com/Delpedro/sn-prep</span>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="card full">
+    <div class="card-header">
+      <div class="card-dot" style="background:#fbbf24;"></div>
+      <span class="card-title">Tips to remember</span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>Quotes matter</strong> — any folder with spaces in the name needs quotes: <code style="color:#fcd34d;background:var(--amber-bg)">cd "Claude Docs"</code></span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>The dot</strong> — a single <code style="color:#fcd34d;background:var(--amber-bg)">.</code> means "current folder". So <code style="color:#fcd34d;background:var(--amber-bg)">git clone URL .</code> clones into where you already are.</span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>Always pull before you push</strong> — run <code style="color:#fcd34d;background:var(--amber-bg)">git pull</code> first if you've made changes on GitHub directly (like uploading files via browser).</span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>VS Code shortcut</strong> — once you're in a repo folder in terminal, <code style="color:#fcd34d;background:var(--amber-bg)">code .</code> opens it instantly. No clicking around.</span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>GitHub Pages URL pattern</strong> — your sites live at <code style="color:#fcd34d;background:var(--amber-bg)">https://delpedro.github.io/REPONAME/</code> — needs an index.html to work at root.</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  // Pedro's personal cheat sheet · add to this as you learn ·  save as bookmark
+</footer>
+
+</body>
+</html>
