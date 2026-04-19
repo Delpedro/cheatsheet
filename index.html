@@ -43,7 +43,6 @@
     min-height: 100vh;
   }
 
-  /* ── HEADER ── */
   header {
     padding: 2.5rem 2rem 0;
     max-width: 1000px;
@@ -80,7 +79,6 @@
     text-align: right;
   }
 
-  /* ── LAYOUT ── */
   main {
     max-width: 1000px;
     margin: 0 auto;
@@ -95,7 +93,6 @@
     main { grid-template-columns: 1fr; }
   }
 
-  /* ── SECTION CARD ── */
   .card {
     background: var(--bg2);
     border: 1px solid var(--border);
@@ -126,7 +123,6 @@
     color: var(--text2);
   }
 
-  /* ── COMMAND ROW ── */
   .cmd-row {
     padding: 0.75rem 1.1rem;
     border-bottom: 1px solid var(--border);
@@ -147,7 +143,7 @@
     padding: 3px 8px;
     border-radius: 4px;
     display: inline-block;
-    word-break: break-all;
+    word-break: break-word;
   }
 
   .cmd-desc {
@@ -161,16 +157,13 @@
     font-weight: 500;
   }
 
-  /* colour variants */
   .blue code   { color: #93c5fd; background: var(--blue-bg); }
   .amber code  { color: #fcd34d; background: var(--amber-bg); }
   .red code    { color: #fca5a5; background: var(--red-bg); }
   .purple code { color: #c4b5fd; background: var(--purple-bg); }
 
-  /* ── FULL WIDTH ── */
   .full { grid-column: 1 / -1; }
 
-  /* ── TIPS SECTION ── */
   .tip-row {
     padding: 0.7rem 1.1rem;
     border-bottom: 1px solid var(--border);
@@ -185,7 +178,6 @@
   .tip-icon { color: var(--amber); flex-shrink: 0; font-size: 14px; margin-top: 1px; }
   .tip-row strong { color: var(--text); font-weight: 500; }
 
-  /* ── FOOTER ── */
   footer {
     text-align: center;
     padding: 2rem;
@@ -203,7 +195,7 @@
 <header>
   <div class="header-left">
     <h1>Pedro's <span>Cheat Sheet</span></h1>
-    <p>// terminal · git · vs code · docker</p>
+    <p>// terminal · git · vs code · docker · npm</p>
   </div>
 </header>
 
@@ -349,8 +341,8 @@
     </div>
   </div>
 
-    <!-- DOCKER -->
-  <div class="card">
+  <!-- DOCKER -->
+  <div class="card full">
     <div class="card-header">
       <div class="card-dot" style="background:#38bdf8;"></div>
       <span class="card-title">Docker</span>
@@ -389,8 +381,40 @@
     </div>
   </div>
 
+  <!-- NPM / DEV SERVER -->
+  <div class="card full">
+    <div class="card-header">
+      <div class="card-dot" style="background:#4ade80;"></div>
+      <span class="card-title">npm / Dev Server</span>
+    </div>
+    <div class="cmd-row">
+      <code>npm init -y</code>
+      <span class="cmd-desc">Create a default <strong>package.json</strong> in the current folder</span>
+    </div>
+    <div class="cmd-row">
+      <code>npm install live-server --save-dev</code>
+      <span class="cmd-desc">Install <strong>live-server</strong> as a dev dependency for local development</span>
+    </div>
+    <div class="cmd-row">
+      <code>npm install</code>
+      <span class="cmd-desc">Install all packages listed in <strong>package.json</strong></span>
+    </div>
+    <div class="cmd-row">
+      <code>npm start</code>
+      <span class="cmd-desc">Run the local dev server from the <strong>start</strong> script</span>
+    </div>
+    <div class="cmd-row">
+      <code>Ctrl + C</code>
+      <span class="cmd-desc">Stop the running dev server in the VS Code terminal</span>
+    </div>
+    <div class="cmd-row">
+      <code>"start": "live-server"</code>
+      <span class="cmd-desc">Add this to the <strong>scripts</strong> section in <strong>package.json</strong></span>
+    </div>
+  </div>
+
   <!-- MY REPOS -->
-  <div class="card">
+  <div class="card full">
     <div class="card-header">
       <div class="card-dot" style="background:#f87171;"></div>
       <span class="card-title">My Repos</span>
@@ -410,7 +434,7 @@
   </div>
 
   <!-- TIPS -->
-  <div class="card">
+  <div class="card full">
     <div class="card-header">
       <div class="card-dot" style="background:#fbbf24;"></div>
       <span class="card-title">Tips to remember</span>
@@ -439,20 +463,28 @@
       <span class="tip-icon">★</span>
       <span><strong>Always check your branch first</strong> — run <code style="color:#fcd34d;background:var(--amber-bg)">git branch</code> before starting any session. You should always see <strong>* main</strong>. If you see <strong>* master</strong> run <code style="color:#fcd34d;background:var(--amber-bg)">git checkout main</code> before touching anything.</span>
     </div>
-        <div class="tip-row">
+    <div class="tip-row">
       <span class="tip-icon">★</span>
       <span><strong>Docker mental model</strong> — an <code style="color:#fcd34d;background:var(--amber-bg)">image</code> is a template, a <code style="color:#fcd34d;background:var(--amber-bg)">container</code> is a running instance, and Docker is the engine running it all.</span>
     </div>
-        <div class="tip-row">
+    <div class="tip-row">
       <span class="tip-icon">★</span>
       <span><strong>URLs do not go in terminal</strong> — if you run a container on <code style="color:#fcd34d;background:var(--amber-bg)">localhost:8080</code>, open that in your browser, not in Command Prompt.</span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>Stop local server cleanly</strong> — after running <code style="color:#fcd34d;background:var(--amber-bg)">npm start</code>, use <code style="color:#fcd34d;background:var(--amber-bg)">Ctrl + C</code> in the VS Code terminal to stop it.</span>
+    </div>
+    <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>PWAs need localhost or HTTPS</strong> — service workers do not work properly from plain file opening, so always run the app through a local server during development.</span>
     </div>
   </div>
 
 </main>
 
 <footer>
-  // Pedro's personal cheat sheet · add to this as you learn ·  save as bookmark
+  // Pedro's personal cheat sheet · add to this as you learn · save as bookmark
 </footer>
 
 </body>
