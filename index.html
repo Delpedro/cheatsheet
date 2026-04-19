@@ -203,7 +203,7 @@
 <header>
   <div class="header-left">
     <h1>Pedro's <span>Cheat Sheet</span></h1>
-    <p>// terminal · git · vs code</p>
+    <p>// terminal · git · vs code · docker</p>
   </div>
 </header>
 
@@ -349,8 +349,48 @@
     </div>
   </div>
 
+    <!-- DOCKER -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot" style="background:#38bdf8;"></div>
+      <span class="card-title">Docker</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker --version</code>
+      <span class="cmd-desc">Check Docker is installed and working</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker run hello-world</code>
+      <span class="cmd-desc">Quick test to verify Docker can run a container</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker run -d -p 8080:80 --name my-nginx nginx</code>
+      <span class="cmd-desc">Run a test web server in the background on <strong>localhost:8080</strong></span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker ps</code>
+      <span class="cmd-desc">See running containers</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker ps -a</code>
+      <span class="cmd-desc">See all containers, including stopped ones</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker stop my-nginx</code>
+      <span class="cmd-desc">Stop the nginx test container</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker start my-nginx</code>
+      <span class="cmd-desc">Start the nginx test container again</span>
+    </div>
+    <div class="cmd-row blue">
+      <code>docker rm my-nginx</code>
+      <span class="cmd-desc">Remove the nginx container once you no longer need it</span>
+    </div>
+  </div>
+
   <!-- MY REPOS -->
-  <div class="card full">
+  <div class="card">
     <div class="card-header">
       <div class="card-dot" style="background:#f87171;"></div>
       <span class="card-title">My Repos</span>
@@ -370,7 +410,7 @@
   </div>
 
   <!-- TIPS -->
-  <div class="card full">
+  <div class="card">
     <div class="card-header">
       <div class="card-dot" style="background:#fbbf24;"></div>
       <span class="card-title">Tips to remember</span>
@@ -398,6 +438,14 @@
     <div class="tip-row">
       <span class="tip-icon">★</span>
       <span><strong>Always check your branch first</strong> — run <code style="color:#fcd34d;background:var(--amber-bg)">git branch</code> before starting any session. You should always see <strong>* main</strong>. If you see <strong>* master</strong> run <code style="color:#fcd34d;background:var(--amber-bg)">git checkout main</code> before touching anything.</span>
+    </div>
+        <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>Docker mental model</strong> — an <code style="color:#fcd34d;background:var(--amber-bg)">image</code> is a template, a <code style="color:#fcd34d;background:var(--amber-bg)">container</code> is a running instance, and Docker is the engine running it all.</span>
+    </div>
+        <div class="tip-row">
+      <span class="tip-icon">★</span>
+      <span><strong>URLs do not go in terminal</strong> — if you run a container on <code style="color:#fcd34d;background:var(--amber-bg)">localhost:8080</code>, open that in your browser, not in Command Prompt.</span>
     </div>
   </div>
 
