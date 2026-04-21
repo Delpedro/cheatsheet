@@ -1,0 +1,24 @@
+{
+  "name": "cheatsheet",
+  "version": "1.0.0",
+  "description": "A file to save and help me learn all cli commands in cmd / vs-code / git / docker",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Delpedro/cheatsheet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Delpedro/cheatsheet/issues"
+  },
+  "homepage": "https://github.com/Delpedro/cheatsheet#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
