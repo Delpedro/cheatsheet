@@ -7,35 +7,36 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0b1020;
-      --bg2: #11172a;
-      --bg3: #161f37;
-      --bg4: #1c2745;
-      --border: #24314f;
-      --border2: #33446d;
-      --text: #e6edf7;
-      --text2: #9fb0d0;
-      --text3: #66789d;
+      --bg: #07111f;
+      --bg-soft: #0b1628;
+      --panel: rgba(12, 22, 40, 0.82);
+      --panel-2: rgba(15, 27, 48, 0.92);
+      --stroke: rgba(143, 181, 255, 0.12);
+      --stroke-strong: rgba(143, 181, 255, 0.22);
+      --text: #edf4ff;
+      --muted: #9eb2cf;
+      --muted-2: #6f86a9;
       --green: #4ade80;
-      --green-bg: rgba(74, 222, 128, 0.10);
+      --green-bg: rgba(74, 222, 128, 0.12);
       --blue: #60a5fa;
-      --blue-bg: rgba(96, 165, 250, 0.10);
+      --blue-bg: rgba(96, 165, 250, 0.12);
       --amber: #fbbf24;
-      --amber-bg: rgba(251, 191, 36, 0.10);
+      --amber-bg: rgba(251, 191, 36, 0.12);
       --red: #f87171;
-      --red-bg: rgba(248, 113, 113, 0.10);
+      --red-bg: rgba(248, 113, 113, 0.12);
       --purple: #a78bfa;
-      --purple-bg: rgba(167, 139, 250, 0.10);
+      --purple-bg: rgba(167, 139, 250, 0.12);
       --cyan: #22d3ee;
-      --cyan-bg: rgba(34, 211, 238, 0.10);
-      --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-      --mono: 'JetBrains Mono', monospace;
-      --sans: 'Space Grotesk', sans-serif;
-      --radius: 18px;
+      --cyan-bg: rgba(34, 211, 238, 0.12);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --max: 1400px;
     }
 
     * {
@@ -49,944 +50,1176 @@
     }
 
     body {
-      font-family: var(--sans);
-      background:
-        radial-gradient(circle at top left, rgba(96,165,250,0.08), transparent 28%),
-        radial-gradient(circle at top right, rgba(167,139,250,0.08), transparent 22%),
-        linear-gradient(180deg, #09101d 0%, #0b1020 100%);
+      font-family: "Inter", system-ui, sans-serif;
       color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(167, 139, 250, 0.12), transparent 22%),
+        radial-gradient(circle at 50% 0%, rgba(96, 165, 250, 0.08), transparent 28%),
+        linear-gradient(180deg, #050d18 0%, #07111f 100%);
       min-height: 100vh;
-      font-size: 15px;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
-    .shell {
-      max-width: 1350px;
+    .wrap {
+      width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
-      padding: 24px;
+      padding: 28px 0 48px;
     }
 
     .hero {
       position: sticky;
       top: 0;
-      z-index: 30;
-      backdrop-filter: blur(14px);
-      background: rgba(11, 16, 32, 0.78);
-      border-bottom: 1px solid rgba(51, 68, 109, 0.45);
-      margin: 0 -24px 24px;
-      padding: 22px 24px 18px;
+      z-index: 40;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, rgba(5, 13, 24, 0.88), rgba(5, 13, 24, 0.72));
+      border: 1px solid var(--stroke);
+      border-radius: 0 0 28px 28px;
+      border-top: 0;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
     }
 
     .hero-inner {
-      max-width: 1350px;
+      width: min(var(--max), calc(100% - 32px));
       margin: 0 auto;
+      padding: 26px 0 20px;
     }
 
-    .topline {
+    .hero-top {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 24px;
       margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
-    .title-wrap h1 {
-      font-size: clamp(1.8rem, 3vw, 2.7rem);
-      line-height: 1;
-      font-weight: 700;
-      letter-spacing: -0.04em;
+    .title h1 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
     }
 
-    .title-wrap h1 span {
+    .title h1 span {
       color: var(--green);
     }
 
-    .subtitle {
-      margin-top: 8px;
-      color: var(--text2);
+    .title p {
+      color: var(--muted);
       font-size: 0.98rem;
+      max-width: 760px;
     }
 
     .meta {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
-      justify-content: flex-end;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--border);
-      background: rgba(22, 31, 55, 0.85);
+    .badge {
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
       padding: 10px 14px;
       border-radius: 999px;
-      color: var(--text2);
       font-size: 12px;
-      font-family: var(--mono);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
     }
 
-    .controls {
+    .search-row {
       display: grid;
-      grid-template-columns: 1.6fr auto;
+      grid-template-columns: 1fr auto;
       gap: 14px;
       align-items: center;
     }
 
-    .search-wrap {
+    .search {
       position: relative;
     }
 
-    .search-wrap input {
+    .search input {
       width: 100%;
-      background: rgba(17, 23, 42, 0.92);
-      border: 1px solid var(--border2);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--stroke-strong);
       color: var(--text);
-      border-radius: 14px;
-      padding: 16px 16px 16px 50px;
-      outline: none;
+      border-radius: 18px;
+      padding: 16px 18px 16px 52px;
       font-size: 15px;
-      font-family: var(--sans);
-      box-shadow: var(--shadow);
+      outline: none;
+      transition: 0.2s ease;
     }
 
-    .search-wrap input::placeholder {
-      color: var(--text3);
+    .search input:focus {
+      border-color: rgba(96, 165, 250, 0.45);
+      box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.08);
     }
 
-    .search-icon {
+    .search .icon {
       position: absolute;
-      left: 16px;
+      left: 18px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--text3);
+      color: var(--muted-2);
       font-size: 16px;
       pointer-events: none;
     }
 
-    .tab-bar {
+    .filters {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
       justify-content: flex-end;
     }
 
-    .tab-btn {
-      border: 1px solid var(--border);
-      background: rgba(17, 23, 42, 0.92);
-      color: var(--text2);
+    .filter-btn {
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
       padding: 12px 14px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      transition: 0.2s ease;
-      box-shadow: var(--shadow);
-    }
-
-    .tab-btn:hover {
-      border-color: var(--border2);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(180deg, rgba(96,165,250,0.14), rgba(167,139,250,0.10));
-      border-color: #4c6cb1;
-      color: #fff;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 22px;
-      align-items: start;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 170px;
-      display: grid;
-      gap: 18px;
-    }
-
-    .panel,
-    .card {
-      background: linear-gradient(180deg, rgba(17,23,42,0.98), rgba(15,20,37,0.98));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-
-    .panel-header,
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 18px;
-      border-bottom: 1px solid rgba(51, 68, 109, 0.4);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
-    }
-
-    .card-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 4px rgba(255,255,255,0.03);
-    }
-
-    .card-title,
-    .panel-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--text2);
       font-weight: 700;
-    }
-
-    .panel-body {
-      padding: 16px 18px;
-    }
-
-    .quick-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .quick-item {
-      display: grid;
-      gap: 6px;
-      padding: 12px 12px;
-      border: 1px solid rgba(51, 68, 109, 0.4);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
+      cursor: pointer;
       transition: 0.18s ease;
     }
 
-    .quick-item:hover {
-      border-color: var(--border2);
+    .filter-btn:hover {
+      color: var(--text);
+      border-color: var(--stroke-strong);
       transform: translateY(-1px);
     }
 
-    .quick-item small {
-      color: var(--text3);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 700;
+    .filter-btn.active {
+      color: #fff;
+      background: linear-gradient(180deg, rgba(96,165,250,0.18), rgba(167,139,250,0.14));
+      border-color: rgba(96, 165, 250, 0.45);
     }
 
-    code.inline-code,
-    .quick-item code,
-    .cmd-row code {
-      font-family: var(--mono);
+    .status {
+      margin-top: 14px;
+      color: var(--muted-2);
+      font-size: 12px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .quickbar {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .quick-card {
+      background: linear-gradient(180deg, var(--panel), rgba(9, 18, 32, 0.92));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: 0.18s ease;
+    }
+
+    .quick-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--stroke-strong);
+    }
+
+    .quick-label {
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .quick-card code {
+      font-family: "JetBrains Mono", monospace;
       font-size: 13px;
-      border-radius: 10px;
-      padding: 6px 10px;
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      padding: 10px 12px;
       display: inline-block;
       width: fit-content;
       word-break: break-word;
     }
 
-    .quick-item code {
-      color: var(--green);
-      background: var(--green-bg);
+    .quick-card p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
     }
 
-    .helper-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .helper-item {
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(51, 68, 109, 0.35);
-      color: var(--text2);
-      font-size: 13px;
-    }
-
-    .helper-item strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .content {
+    .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
+      gap: 22px;
       align-items: start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel-2), rgba(10, 20, 36, 0.96));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      min-width: 0;
     }
 
     .card.full {
       grid-column: 1 / -1;
     }
 
-    .cmd-row,
-    .tip-row {
-      padding: 14px 18px;
-      border-bottom: 1px solid rgba(51, 68, 109, 0.35);
-      display: grid;
-      gap: 7px;
-      transition: background 0.18s ease;
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(143, 181, 255, 0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
     }
 
-    .cmd-row:last-child,
-    .tip-row:last-child {
-      border-bottom: none;
+    .card-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
     }
 
-    .cmd-row:hover,
-    .tip-row:hover {
-      background: rgba(255,255,255,0.02);
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      flex: 0 0 auto;
     }
 
-    .cmd-desc {
-      color: var(--text2);
+    .card-header h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .card-header span {
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      padding: 8px;
+    }
+
+    .item {
+      padding: 14px 14px 14px 14px;
+      border-radius: 16px;
+      transition: 0.16s ease;
+      border: 1px solid transparent;
+      margin: 6px;
+    }
+
+    .item:hover {
+      background: rgba(255,255,255,0.025);
+      border-color: rgba(143, 181, 255, 0.08);
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .cmd {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cmd code {
+      font-family: "JetBrains Mono", monospace;
       font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: inline-block;
+      max-width: 100%;
+      word-break: break-word;
+      border: 1px solid transparent;
+    }
+
+    .copy-btn {
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 9px 10px;
+      cursor: pointer;
+      transition: 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      color: var(--text);
+      border-color: var(--stroke-strong);
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: 14px;
       padding-left: 2px;
     }
 
-    .cmd-desc strong,
-    .tip-row strong {
+    .desc strong {
       color: var(--text);
-      font-weight: 600;
     }
 
-    .green code { color: var(--green); background: var(--green-bg); }
-    .blue code { color: var(--blue); background: var(--blue-bg); }
-    .amber code { color: var(--amber); background: var(--amber-bg); }
-    .red code { color: var(--red); background: var(--red-bg); }
-    .purple code { color: var(--purple); background: var(--purple-bg); }
-    .cyan code { color: var(--cyan); background: var(--cyan-bg); }
+    .green code { color: var(--green); background: var(--green-bg); border-color: rgba(74,222,128,0.18); }
+    .blue code { color: var(--blue); background: var(--blue-bg); border-color: rgba(96,165,250,0.18); }
+    .amber code { color: var(--amber); background: var(--amber-bg); border-color: rgba(251,191,36,0.18); }
+    .red code { color: var(--red); background: var(--red-bg); border-color: rgba(248,113,113,0.18); }
+    .purple code { color: var(--purple); background: var(--purple-bg); border-color: rgba(167,139,250,0.18); }
+    .cyan code { color: var(--cyan); background: var(--cyan-bg); border-color: rgba(34,211,238,0.18); }
 
-    .tip-row {
-      grid-template-columns: auto 1fr;
-      align-items: start;
-      gap: 12px;
-    }
-
-    .tip-icon {
-      color: var(--amber);
-      font-size: 14px;
-      margin-top: 2px;
-    }
-
-    .section-note {
-      padding: 14px 18px;
-      border-bottom: 1px solid rgba(51, 68, 109, 0.35);
-      color: var(--text2);
-      font-size: 13px;
-      background: rgba(255,255,255,0.015);
-    }
-
-    .status-bar {
-      margin-top: 18px;
-      color: var(--text3);
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      color: var(--muted-2);
       font-size: 12px;
-      font-family: var(--mono);
+      font-family: "JetBrains Mono", monospace;
     }
 
     .hidden {
       display: none !important;
     }
 
-    .empty-state {
-      grid-column: 1 / -1;
-      padding: 28px;
-      border: 1px dashed var(--border2);
-      border-radius: var(--radius);
-      background: rgba(17, 23, 42, 0.5);
-      color: var(--text2);
+    .empty {
+      display: none;
+      margin-top: 20px;
+      border: 1px dashed var(--stroke-strong);
+      border-radius: var(--radius-xl);
+      padding: 36px 22px;
       text-align: center;
-      box-shadow: var(--shadow);
+      color: var(--muted);
+      background: rgba(255,255,255,0.02);
     }
 
-    footer {
-      margin-top: 26px;
-      padding: 22px 8px 12px;
-      text-align: center;
-      color: var(--text3);
-      font-size: 12px;
-      font-family: var(--mono);
+    @media (max-width: 1200px) {
+      .quickbar {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
-    @media (max-width: 1100px) {
-      .layout {
+    @media (max-width: 980px) {
+      .search-row {
         grid-template-columns: 1fr;
       }
 
-      .sidebar {
-        position: static;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .controls {
-        grid-template-columns: 1fr;
-      }
-
-      .tab-bar {
+      .filters {
         justify-content: flex-start;
       }
-    }
 
-    @media (max-width: 760px) {
-      .content,
-      .sidebar {
+      .grid {
         grid-template-columns: 1fr;
       }
 
+      .card.full {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(var(--max), calc(100% - 20px));
+      }
+
+      .hero-inner {
+        width: min(var(--max), calc(100% - 20px));
+      }
+
+      .quickbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .hero {
-        position: static;
+        border-radius: 0 0 20px 20px;
       }
 
-      .shell {
-        padding: 14px;
+      .item-top {
+        flex-direction: column;
+        align-items: stretch;
       }
 
-      .hero {
-        margin: 0 -14px 20px;
-        padding: 16px 14px;
+      .copy-btn {
+        width: fit-content;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .quickbar {
+        grid-template-columns: 1fr;
       }
 
-      .search-wrap input {
-        padding: 14px 14px 14px 44px;
+      .filter-btn {
+        flex: 1 1 auto;
       }
     }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header class="hero">
-      <div class="hero-inner">
-        <div class="topline">
-          <div class="title-wrap">
-            <h1>Pedro’s <span>Cheat Sheet</span></h1>
-            <p class="subtitle">Fast lookup for terminal, Git, Docker, npm, setup flows, and “what do I run next?” moments.</p>
-          </div>
-
-          <div class="meta">
-            <div class="pill">CLI / Git / Docker / npm</div>
-            <div class="pill">Built for real panic moments</div>
-            <div class="pill">Single-file reference site</div>
-          </div>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <div class="title">
+          <h1>Pedro’s <span>Cheat Sheet</span></h1>
+          <p>Fast lookup for terminal, Git, Docker, npm, setup flows, and all the “what the fuck do I run now?” moments.</p>
         </div>
 
-        <div class="controls">
-          <div class="search-wrap">
-            <span class="search-icon">⌕</span>
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Search commands, setup steps, repo names, ports, scripts..."
-              autocomplete="off"
-            />
-          </div>
-
-          <div class="tab-bar" id="tabBar">
-            <button class="tab-btn active" data-filter="all">All</button>
-            <button class="tab-btn" data-filter="quick">Quick</button>
-            <button class="tab-btn" data-filter="terminal">Terminal</button>
-            <button class="tab-btn" data-filter="git">Git</button>
-            <button class="tab-btn" data-filter="docker">Docker</button>
-            <button class="tab-btn" data-filter="npm">npm</button>
-            <button class="tab-btn" data-filter="setup">Setup</button>
-            <button class="tab-btn" data-filter="tips">Tips</button>
-            <button class="tab-btn" data-filter="repos">Repos</button>
-          </div>
+        <div class="meta">
+          <div class="badge">Clean dark UI</div>
+          <div class="badge">Search + filters</div>
+          <div class="badge">Copy-ready commands</div>
+          <div class="badge">Single file</div>
         </div>
-
-        <div class="status-bar" id="statusBar">Showing all sections</div>
       </div>
-    </header>
 
-    <div class="layout">
-      <aside class="sidebar">
-        <section class="panel" data-tags="quick">
-          <div class="panel-header">
-            <div class="card-dot" style="background: var(--green);"></div>
-            <span class="panel-title">Quick Access</span>
-          </div>
-          <div class="panel-body">
-            <div class="quick-list">
-              <div class="quick-item">
-                <small>Git</small>
-                <code>git status</code>
-              </div>
-              <div class="quick-item">
-                <small>Git</small>
-                <code>git add -A</code>
-              </div>
-              <div class="quick-item">
-                <small>Git</small>
-                <code>git commit -m "message"</code>
-              </div>
-              <div class="quick-item">
-                <small>Git</small>
-                <code>git pull origin main --rebase</code>
-              </div>
-              <div class="quick-item">
-                <small>npm</small>
-                <code>npm start</code>
-              </div>
-              <div class="quick-item">
-                <small>Docker</small>
-                <code>docker ps</code>
-              </div>
-              <div class="quick-item">
-                <small>Docker</small>
-                <code>docker build -t cheatsheet-site .</code>
-              </div>
-              <div class="quick-item">
-                <small>VS Code</small>
-                <code>code .</code>
-              </div>
+      <div class="search-row">
+        <div class="search">
+          <span class="icon">⌕</span>
+          <input id="searchInput" type="text" placeholder="Search commands, setup steps, branches, ports, scripts..." />
+        </div>
+
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="quick">Quick</button>
+          <button class="filter-btn" data-filter="terminal">Terminal</button>
+          <button class="filter-btn" data-filter="git">Git</button>
+          <button class="filter-btn" data-filter="docker">Docker</button>
+          <button class="filter-btn" data-filter="npm">npm</button>
+          <button class="filter-btn" data-filter="setup">Setup</button>
+          <button class="filter-btn" data-filter="tips">Tips</button>
+          <button class="filter-btn" data-filter="repos">Repos</button>
+        </div>
+      </div>
+
+      <div class="status" id="statusText">Showing all sections</div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="quickbar" id="quickbar">
+      <div class="quick-card" data-tags="quick git">
+        <div>
+          <div class="quick-label">Git</div>
+          <code>git status</code>
+        </div>
+        <p>Check branch state and changed files first.</p>
+      </div>
+
+      <div class="quick-card" data-tags="quick git">
+        <div>
+          <div class="quick-label">Git</div>
+          <code>git add -A</code>
+        </div>
+        <p>Stage everything in one go.</p>
+      </div>
+
+      <div class="quick-card" data-tags="quick git">
+        <div>
+          <div class="quick-label">Git</div>
+          <code>git commit -m "message"</code>
+        </div>
+        <p>Save a clean local snapshot.</p>
+      </div>
+
+      <div class="quick-card" data-tags="quick git">
+        <div>
+          <div class="quick-label">Git</div>
+          <code>git pull origin main --rebase</code>
+        </div>
+        <p>Fix push rejection cleanly.</p>
+      </div>
+
+      <div class="quick-card" data-tags="quick docker">
+        <div>
+          <div class="quick-label">Docker</div>
+          <code>docker build -t cheatsheet-site .</code>
+        </div>
+        <p>Rebuild after file changes.</p>
+      </div>
+
+      <div class="quick-card" data-tags="quick terminal">
+        <div>
+          <div class="quick-label">VS Code</div>
+          <code>code .</code>
+        </div>
+        <p>Open current folder instantly.</p>
+      </div>
+    </section>
+
+    <section class="grid" id="cardGrid">
+      <article class="card full" data-tags="quick setup git docker npm">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--purple);"></div>
+            <div>
+              <span>Core flows</span>
+              <h2>Most Useful Workflows</h2>
             </div>
           </div>
-        </section>
-
-        <section class="panel" data-tags="quick tips">
-          <div class="panel-header">
-            <div class="card-dot" style="background: var(--amber);"></div>
-            <span class="panel-title">Mental Models</span>
+        </div>
+        <div class="card-body">
+          <div class="item purple">
+            <div class="item-top">
+              <div class="cmd"><code>Build fast → use npm</code></div>
+            </div>
+            <div class="desc">Use npm / live-server while editing so changes show instantly.</div>
           </div>
-          <div class="panel-body">
-            <div class="helper-list">
-              <div class="helper-item">
-                <strong>npm = live files</strong><br>
-                Better for fast editing and instant feedback.
-              </div>
-              <div class="helper-item">
-                <strong>Docker = snapshot</strong><br>
-                Rebuild after changes or you keep serving the old version.
-              </div>
-              <div class="helper-item">
-                <strong>Push rejected?</strong><br>
-                Pull first, then push again.
-              </div>
-              <div class="helper-item">
-                <strong>Missing start script?</strong><br>
-                Add <code class="inline-code" style="color:var(--green);background:var(--green-bg);">"start": "live-server"</code> in <code class="inline-code" style="color:var(--green);background:var(--green-bg);">package.json</code>.
-              </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>Verify cleanly → use Docker</code></div>
+            </div>
+            <div class="desc">Use Docker when you want the site checked in a fresh environment.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>npm setup → install → script → start</code></div>
+            </div>
+            <div class="desc"><strong>npm init -y</strong> → <strong>npm install live-server --save-dev</strong> → add <strong>"start": "live-server"</strong> → <strong>npm start</strong>.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>Docker setup → build → remove old → run new</code></div>
+            </div>
+            <div class="desc"><strong>Open Docker Desktop</strong> → <strong>docker build -t cheatsheet-site .</strong> → <strong>docker rm -f cheatsheet-container</strong> → <strong>docker run -d -p 8081:80 --name cheatsheet-container cheatsheet-site</strong>.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>Push rejected? pull --rebase → push</code></div>
+            </div>
+            <div class="desc">If remote changed, rebase your local commit on top, then push.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-tags="terminal">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--green);"></div>
+            <div>
+              <span>CLI basics</span>
+              <h2>Terminal / Navigation</h2>
             </div>
           </div>
-        </section>
-      </aside>
-
-      <main class="content" id="contentArea">
-
-        <section class="card full" data-tags="quick terminal git docker npm setup">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--purple);"></div>
-            <span class="card-title">Workflows — Most Useful Flows</span>
+        </div>
+        <div class="card-body">
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>dir</code></div>
+              <button class="copy-btn" data-copy="dir">Copy</button>
+            </div>
+            <div class="desc">List files in current folder in Windows.</div>
           </div>
 
-          <div class="cmd-row purple">
-            <code>Build fast → use npm</code>
-            <span class="cmd-desc">Use <strong>npm / live-server</strong> while editing so changes show instantly.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>ls</code></div>
+              <button class="copy-btn" data-copy="ls">Copy</button>
+            </div>
+            <div class="desc">List files in current folder in PowerShell.</div>
           </div>
 
-          <div class="cmd-row blue">
-            <code>Verify cleanly → use Docker</code>
-            <span class="cmd-desc">Use Docker when you want to test in a fresh container environment.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>cd ..</code></div>
+              <button class="copy-btn" data-copy="cd ..">Copy</button>
+            </div>
+            <div class="desc">Go up one folder level.</div>
           </div>
 
-          <div class="cmd-row green">
-            <code>npm flow</code>
-            <span class="cmd-desc"><strong>npm init -y</strong> → <strong>npm install live-server --save-dev</strong> → add <strong>"start": "live-server"</strong> → <strong>npm start</strong>.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>cd FolderName</code></div>
+            </div>
+            <div class="desc">Go into a folder.</div>
           </div>
 
-          <div class="cmd-row cyan">
-            <code>Docker flow</code>
-            <span class="cmd-desc"><strong>Open Docker Desktop</strong> → <strong>docker build -t cheatsheet-site .</strong> → <strong>docker rm -f cheatsheet-container</strong> → <strong>docker run -d -p 8081:80 --name cheatsheet-container cheatsheet-site</strong>.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>cd "Claude Docs\Genesys"</code></div>
+              <button class="copy-btn" data-copy='cd "Claude Docs\Genesys"'>Copy</button>
+            </div>
+            <div class="desc">Use quotes when a folder name contains spaces.</div>
           </div>
 
-          <div class="cmd-row amber">
-            <code>Push rejected?</code>
-            <span class="cmd-desc"><strong>git pull origin main --rebase</strong> → resolve conflicts if needed → <strong>git push</strong>.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>code .</code></div>
+              <button class="copy-btn" data-copy="code .">Copy</button>
+            </div>
+            <div class="desc">Open the current folder in VS Code.</div>
           </div>
-        </section>
+        </div>
+      </article>
 
-        <section class="card" data-tags="terminal">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--green);"></div>
-            <span class="card-title">Terminal / Navigation</span>
+      <article class="card" data-tags="git">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--blue);"></div>
+            <div>
+              <span>Version control</span>
+              <h2>Git — Basics</h2>
+            </div>
           </div>
-
-          <div class="cmd-row green">
-            <code>dir</code>
-            <span class="cmd-desc">List files in the current folder in Windows PowerShell / CMD.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>ls</code>
-            <span class="cmd-desc">List files in the current folder, common in PowerShell and Unix-style shells.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>cd ..</code>
-            <span class="cmd-desc">Go up one folder level.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>cd FolderName</code>
-            <span class="cmd-desc">Go into a folder.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>cd "Claude Docs\Genesys"</code>
-            <span class="cmd-desc">Use quotes when the folder name contains spaces.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>code .</code>
-            <span class="cmd-desc">Open the current folder in VS Code.</span>
-          </div>
-        </section>
-
-        <section class="card" data-tags="git">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--blue);"></div>
-            <span class="card-title">Git — Basics</span>
+        </div>
+        <div class="card-body">
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>git status</code></div>
+              <button class="copy-btn" data-copy="git status">Copy</button>
+            </div>
+            <div class="desc">Check what changed and whether your branch is clean.</div>
           </div>
 
-          <div class="cmd-row blue">
-            <code>git status</code>
-            <span class="cmd-desc">Check what changed and whether your branch is ahead / behind.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>git add -A</code>
-            <span class="cmd-desc">Stage everything including new, changed, and deleted files.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>git commit -m "your message"</code>
-            <span class="cmd-desc">Create a local snapshot with a meaningful message.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>git push</code>
-            <span class="cmd-desc">Send local commits to GitHub.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>git pull</code>
-            <span class="cmd-desc">Bring remote changes into your local repo.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>git diff</code>
-            <span class="cmd-desc">See exactly what changed before committing.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>git log --oneline</code>
-            <span class="cmd-desc">Compact list of recent commits.</span>
-          </div>
-        </section>
-
-        <section class="card" data-tags="git">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--amber);"></div>
-            <span class="card-title">Git — Branches & Fixes</span>
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>git add -A</code></div>
+              <button class="copy-btn" data-copy="git add -A">Copy</button>
+            </div>
+            <div class="desc">Stage everything: new, changed, and deleted files.</div>
           </div>
 
-          <div class="cmd-row amber">
-            <code>git branch</code>
-            <span class="cmd-desc">Check which branch you’re on. You usually want <strong>* main</strong>.</span>
-          </div>
-          <div class="cmd-row amber">
-            <code>git checkout main</code>
-            <span class="cmd-desc">Switch to the main branch.</span>
-          </div>
-          <div class="cmd-row amber">
-            <code>git pull origin main --rebase</code>
-            <span class="cmd-desc">Best fix when push is rejected because remote is ahead.</span>
-          </div>
-          <div class="cmd-row amber">
-            <code>git rebase --continue</code>
-            <span class="cmd-desc">Continue after fixing a rebase conflict.</span>
-          </div>
-          <div class="cmd-row amber">
-            <code>git remote prune origin</code>
-            <span class="cmd-desc">Clean up deleted remote branches from your local list.</span>
-          </div>
-          <div class="cmd-row amber">
-            <code>git reset --hard origin/main</code>
-            <span class="cmd-desc">Force your local files to match GitHub exactly. Use with care.</span>
-          </div>
-        </section>
-
-        <section class="card full" data-tags="setup docker">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--cyan);"></div>
-            <span class="card-title">Docker — Setup & Run</span>
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>git commit -m "your message"</code></div>
+            </div>
+            <div class="desc">Create a local snapshot with a useful message.</div>
           </div>
 
-          <div class="section-note">
-            Docker commands will fail unless <strong>Docker Desktop is open and running</strong>.
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>git push</code></div>
+              <button class="copy-btn" data-copy="git push">Copy</button>
+            </div>
+            <div class="desc">Send local commits to GitHub.</div>
           </div>
 
-          <div class="cmd-row cyan">
-            <code>Install Docker Desktop</code>
-            <span class="cmd-desc">Docker Desktop is required on Windows for local Docker containers.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>Open Docker Desktop</code>
-            <span class="cmd-desc">Wait until Docker is fully running before using Docker CLI commands.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>docker --version</code>
-            <span class="cmd-desc">Check Docker is installed and available in terminal.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>docker run hello-world</code>
-            <span class="cmd-desc">Quick test to confirm Docker can run a container.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>Dockerfile needed</code>
-            <span class="cmd-desc">A build command like <strong>docker build -t cheatsheet-site .</strong> only works if the current folder contains a valid <strong>Dockerfile</strong>.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>FROM nginx:alpine</code>
-            <span class="cmd-desc">Use nginx as a lightweight static site server.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>COPY index.html /usr/share/nginx/html/index.html</code>
-            <span class="cmd-desc">Copy your site file into nginx’s web root.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>EXPOSE 80</code>
-            <span class="cmd-desc">Document that the container serves traffic on port 80.</span>
-          </div>
-        </section>
-
-        <section class="card" data-tags="docker">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--blue);"></div>
-            <span class="card-title">Docker — Commands</span>
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>git pull</code></div>
+              <button class="copy-btn" data-copy="git pull">Copy</button>
+            </div>
+            <div class="desc">Bring remote changes into your local repo.</div>
           </div>
 
-          <div class="cmd-row blue">
-            <code>docker build -t cheatsheet-site .</code>
-            <span class="cmd-desc">Build an image from the current folder.</span>
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>git diff</code></div>
+              <button class="copy-btn" data-copy="git diff">Copy</button>
+            </div>
+            <div class="desc">See exactly what changed before committing.</div>
           </div>
-          <div class="cmd-row blue">
-            <code>docker run -d -p 8081:80 --name cheatsheet-container cheatsheet-site</code>
-            <span class="cmd-desc">Run the container in the background and map localhost:8081 to container port 80.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>docker ps</code>
-            <span class="cmd-desc">See running containers.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>docker ps -a</code>
-            <span class="cmd-desc">See all containers including stopped ones.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>docker stop cheatsheet-container</code>
-            <span class="cmd-desc">Stop the running container.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>docker start cheatsheet-container</code>
-            <span class="cmd-desc">Start the old container again. This does <strong>not</strong> rebuild your changes.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>docker rm -f cheatsheet-container</code>
-            <span class="cmd-desc">Delete the existing container, useful before recreating it.</span>
-          </div>
-        </section>
+        </div>
+      </article>
 
-        <section class="card" data-tags="docker setup">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--purple);"></div>
-            <span class="card-title">Docker — Mental Model</span>
+      <article class="card" data-tags="git">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--amber);"></div>
+            <div>
+              <span>Recovery / hygiene</span>
+              <h2>Git — Branches & Fixes</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>git branch</code></div>
+              <button class="copy-btn" data-copy="git branch">Copy</button>
+            </div>
+            <div class="desc">Check which branch you're on. You usually want <strong>* main</strong>.</div>
           </div>
 
-          <div class="cmd-row purple">
-            <code>Image = saved snapshot</code>
-            <span class="cmd-desc">An image is the built version of your app at a moment in time.</span>
-          </div>
-          <div class="cmd-row purple">
-            <code>Container = running copy</code>
-            <span class="cmd-desc">A container runs from the image you built earlier.</span>
-          </div>
-          <div class="cmd-row purple">
-            <code>docker start = reuse old version</code>
-            <span class="cmd-desc">Starting a stopped container does not pull in new file changes.</span>
-          </div>
-          <div class="cmd-row purple">
-            <code>Edit file → rebuild → rerun</code>
-            <span class="cmd-desc">That is why Docker feels slower than npm for normal editing.</span>
-          </div>
-        </section>
-
-        <section class="card full" data-tags="setup npm">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--green);"></div>
-            <span class="card-title">npm — Setup & Run</span>
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>git checkout main</code></div>
+              <button class="copy-btn" data-copy="git checkout main">Copy</button>
+            </div>
+            <div class="desc">Switch to the main branch.</div>
           </div>
 
-          <div class="section-note">
-            npm needs a <strong>package.json</strong>. Without that file, <strong>npm start</strong> will fail.
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>git pull origin main --rebase</code></div>
+              <button class="copy-btn" data-copy="git pull origin main --rebase">Copy</button>
+            </div>
+            <div class="desc">Best fix when push is rejected because remote moved ahead.</div>
           </div>
 
-          <div class="cmd-row green">
-            <code>npm init -y</code>
-            <span class="cmd-desc">Create a default <strong>package.json</strong> in the current folder.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>npm install live-server --save-dev</code>
-            <span class="cmd-desc">Install <strong>live-server</strong> as a dev dependency.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>"start": "live-server"</code>
-            <span class="cmd-desc">Add this inside the <strong>scripts</strong> section in <strong>package.json</strong>.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>npm start</code>
-            <span class="cmd-desc">Run the local dev server using the <strong>start</strong> script.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>Ctrl + C</code>
-            <span class="cmd-desc">Stop the running dev server in the terminal.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>npx live-server</code>
-            <span class="cmd-desc">Fast fallback if you want to run it without setting up a start script first.</span>
-          </div>
-        </section>
-
-        <section class="card" data-tags="npm">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--green);"></div>
-            <span class="card-title">npm — package.json Example</span>
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>git rebase --continue</code></div>
+              <button class="copy-btn" data-copy="git rebase --continue">Copy</button>
+            </div>
+            <div class="desc">Continue after fixing a rebase conflict.</div>
           </div>
 
-          <div class="cmd-row green">
-            <code>{
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>git remote prune origin</code></div>
+              <button class="copy-btn" data-copy="git remote prune origin">Copy</button>
+            </div>
+            <div class="desc">Clean up deleted remote branches from your local list.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>git restore index.html</code></div>
+              <button class="copy-btn" data-copy="git restore index.html">Copy</button>
+            </div>
+            <div class="desc">Discard uncommitted changes in one file.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card full" data-tags="docker setup">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--cyan);"></div>
+            <div>
+              <span>Container setup</span>
+              <h2>Docker — Setup & Run</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>Install Docker Desktop</code></div>
+            </div>
+            <div class="desc">Docker Desktop is required on Windows to run Docker containers.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>Open Docker Desktop</code></div>
+            </div>
+            <div class="desc">Wait until Docker is fully running before typing Docker CLI commands.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>docker --version</code></div>
+              <button class="copy-btn" data-copy="docker --version">Copy</button>
+            </div>
+            <div class="desc">Check Docker is installed and available in terminal.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>docker run hello-world</code></div>
+              <button class="copy-btn" data-copy="docker run hello-world">Copy</button>
+            </div>
+            <div class="desc">Quick test to confirm Docker can run a container.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>Dockerfile needed</code></div>
+            </div>
+            <div class="desc">A build command only works if the current folder contains a valid <strong>Dockerfile</strong>.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>FROM nginx:alpine</code></div>
+            </div>
+            <div class="desc">Use nginx as a lightweight static site server.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>COPY index.html /usr/share/nginx/html/index.html</code></div>
+            </div>
+            <div class="desc">Copy your site file into nginx’s web root.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>EXPOSE 80</code></div>
+            </div>
+            <div class="desc">Document the container port used by nginx.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-tags="docker">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--blue);"></div>
+            <div>
+              <span>Commands</span>
+              <h2>Docker — Commands</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>docker build -t cheatsheet-site .</code></div>
+              <button class="copy-btn" data-copy="docker build -t cheatsheet-site .">Copy</button>
+            </div>
+            <div class="desc">Build an image from the current folder.</div>
+          </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>docker run -d -p 8081:80 --name cheatsheet-container cheatsheet-site</code></div>
+            </div>
+            <div class="desc">Run the container in the background and map localhost:8081 to port 80.</div>
+          </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>docker ps</code></div>
+              <button class="copy-btn" data-copy="docker ps">Copy</button>
+            </div>
+            <div class="desc">See running containers.</div>
+          </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>docker stop cheatsheet-container</code></div>
+              <button class="copy-btn" data-copy="docker stop cheatsheet-container">Copy</button>
+            </div>
+            <div class="desc">Stop the running container.</div>
+          </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>docker start cheatsheet-container</code></div>
+              <button class="copy-btn" data-copy="docker start cheatsheet-container">Copy</button>
+            </div>
+            <div class="desc">Restart the old container. This does <strong>not</strong> rebuild new file changes.</div>
+          </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>docker rm -f cheatsheet-container</code></div>
+              <button class="copy-btn" data-copy="docker rm -f cheatsheet-container">Copy</button>
+            </div>
+            <div class="desc">Delete existing container before recreating it.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-tags="docker tips">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--purple);"></div>
+            <div>
+              <span>Mental model</span>
+              <h2>Docker — What It Actually Means</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item purple">
+            <div class="item-top">
+              <div class="cmd"><code>Image = saved snapshot</code></div>
+            </div>
+            <div class="desc">The built version of your app at a moment in time.</div>
+          </div>
+
+          <div class="item purple">
+            <div class="item-top">
+              <div class="cmd"><code>Container = running copy</code></div>
+            </div>
+            <div class="desc">A live instance running from that image.</div>
+          </div>
+
+          <div class="item purple">
+            <div class="item-top">
+              <div class="cmd"><code>docker start = reuse old version</code></div>
+            </div>
+            <div class="desc">Starting an old container does not pull in your new edits.</div>
+          </div>
+
+          <div class="item purple">
+            <div class="item-top">
+              <div class="cmd"><code>Edit file → rebuild → rerun</code></div>
+            </div>
+            <div class="desc">That’s why Docker feels slower than npm for normal editing.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card full" data-tags="npm setup">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--green);"></div>
+            <div>
+              <span>Local dev</span>
+              <h2>npm — Setup & Run</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>npm init -y</code></div>
+              <button class="copy-btn" data-copy="npm init -y">Copy</button>
+            </div>
+            <div class="desc">Create a default <strong>package.json</strong> in the current folder.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>npm install live-server --save-dev</code></div>
+              <button class="copy-btn" data-copy="npm install live-server --save-dev">Copy</button>
+            </div>
+            <div class="desc">Install <strong>live-server</strong> as a local dev dependency.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>"start": "live-server"</code></div>
+            </div>
+            <div class="desc">Add this inside the <strong>scripts</strong> section in <strong>package.json</strong>.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>npm start</code></div>
+              <button class="copy-btn" data-copy="npm start">Copy</button>
+            </div>
+            <div class="desc">Run the local dev server using the start script.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>Ctrl + C</code></div>
+            </div>
+            <div class="desc">Stop the running server in terminal.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>npx live-server</code></div>
+              <button class="copy-btn" data-copy="npx live-server">Copy</button>
+            </div>
+            <div class="desc">Quick fallback if you want to run it without setting up a start script first.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-tags="npm">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--green);"></div>
+            <div>
+              <span>Package file</span>
+              <h2>npm — package.json Example</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>{
   "scripts": {
     "start": "live-server"
   }
-}</code>
-            <span class="cmd-desc">Minimal version needed for <strong>npm start</strong> to work for this site.</span>
+}</code></div>
+            </div>
+            <div class="desc">Minimal version needed for <strong>npm start</strong> to work here.</div>
           </div>
 
-          <div class="cmd-row green">
-            <code>npm run</code>
-            <span class="cmd-desc">See which scripts currently exist in <strong>package.json</strong>.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>npm run</code></div>
+              <button class="copy-btn" data-copy="npm run">Copy</button>
+            </div>
+            <div class="desc">See which scripts currently exist in <strong>package.json</strong>.</div>
           </div>
 
-          <div class="cmd-row green">
-            <code>Missing script: "start"</code>
-            <span class="cmd-desc">This error means the package exists, but the <strong>start</strong> script does not.</span>
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>Missing script: "start"</code></div>
+            </div>
+            <div class="desc">This means package.json exists, but the <strong>start</strong> script does not.</div>
           </div>
-        </section>
-
-        <section class="card" data-tags="npm docker quick">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--purple);"></div>
-            <span class="card-title">npm vs Docker</span>
-          </div>
-
-          <div class="cmd-row purple">
-            <code>npm = local development</code>
-            <span class="cmd-desc">Fast, simple, instant refresh. Best while building.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>Docker = container testing</code>
-            <span class="cmd-desc">Closer to a clean deployment environment. Best for verification.</span>
-          </div>
-          <div class="cmd-row green">
-            <code>Use npm while building</code>
-            <span class="cmd-desc">Edit → save → see changes immediately.</span>
-          </div>
-          <div class="cmd-row cyan">
-            <code>Use Docker to verify</code>
-            <span class="cmd-desc">Build and run a fresh container to make sure the app still works cleanly.</span>
-          </div>
-          <div class="cmd-row amber">
-            <code>npm = speed</code>
-            <span class="cmd-desc">Best for day-to-day editing.</span>
-          </div>
-          <div class="cmd-row blue">
-            <code>Docker = consistency</code>
-            <span class="cmd-desc">Best for testing how the app actually runs in isolation.</span>
-          </div>
-        </section>
-
-        <section class="card full" data-tags="repos">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--red);"></div>
-            <span class="card-title">My Repos</span>
-          </div>
-
-          <div class="cmd-row red">
-            <code>cd "C:\Users\User\Desktop\Claude Docs\crimsonDel"</code>
-            <span class="cmd-desc"><strong>crimsonDel</strong> — Crimson Desert gear index · github.com/Delpedro/crimsonDel</span>
-          </div>
-          <div class="cmd-row red">
-            <code>cd "C:\Users\User\Desktop\Claude Docs\Fitness"</code>
-            <span class="cmd-desc"><strong>Fitness</strong> — Fitness app · dels-montage repo</span>
-          </div>
-          <div class="cmd-row red">
-            <code>cd "C:\Users\User\Desktop\Claude Docs\Genesys"</code>
-            <span class="cmd-desc"><strong>Genesys / sn-prep</strong> — ServiceNow interview prep · github.com/Delpedro/sn-prep</span>
-          </div>
-        </section>
-
-        <section class="card full" data-tags="tips">
-          <div class="card-header">
-            <div class="card-dot" style="background: var(--amber);"></div>
-            <span class="card-title">Tips to Remember</span>
-          </div>
-
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>Quotes matter</strong> — folders with spaces need quotes, for example <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">cd "Claude Docs"</code>.</span>
-          </div>
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>The dot</strong> — <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">.</code> means current folder, so <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">docker build -t app .</code> and <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">git clone URL .</code> both use the current folder.</span>
-          </div>
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>Push rejected?</strong> — pull first. Usually <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">git pull origin main --rebase</code> then <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">git push</code>.</span>
-          </div>
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>Docker commands failing?</strong> — check Docker Desktop is open before debugging your files.</span>
-          </div>
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>Missing package.json?</strong> — <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">npm start</code> will fail if the project has no <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">package.json</code>.</span>
-          </div>
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>Missing script: start?</strong> — your package exists, but the <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">scripts</code> section needs <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">"start": "live-server"</code>.</span>
-          </div>
-          <div class="tip-row">
-            <span class="tip-icon">★</span>
-            <span><strong>GitHub Pages pattern</strong> — sites usually live at <code class="inline-code" style="color:var(--amber);background:var(--amber-bg);">https://delpedro.github.io/REPONAME/</code>.</span>
-          </div>
-        </section>
-
-        <div id="emptyState" class="empty-state hidden">
-          No matching sections. Clear the search or switch tabs.
         </div>
-      </main>
-    </div>
+      </article>
 
-    <footer>
-      // Pedro’s dev operating manual · built to be fast when your brain goes blank
-    </footer>
-  </div>
+      <article class="card" data-tags="npm docker quick">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--purple);"></div>
+            <div>
+              <span>Decision making</span>
+              <h2>npm vs Docker</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item purple">
+            <div class="item-top">
+              <div class="cmd"><code>npm = local development</code></div>
+            </div>
+            <div class="desc">Fast, simple, instant refresh. Best while building.</div>
+          </div>
+
+          <div class="item blue">
+            <div class="item-top">
+              <div class="cmd"><code>Docker = container testing</code></div>
+            </div>
+            <div class="desc">Closer to a clean deployment environment. Best for verification.</div>
+          </div>
+
+          <div class="item green">
+            <div class="item-top">
+              <div class="cmd"><code>Use npm while building</code></div>
+            </div>
+            <div class="desc">Edit → save → see changes immediately.</div>
+          </div>
+
+          <div class="item cyan">
+            <div class="item-top">
+              <div class="cmd"><code>Use Docker to verify</code></div>
+            </div>
+            <div class="desc">Rebuild and run a fresh container to verify the site still works cleanly.</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card full" data-tags="repos">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--red);"></div>
+            <div>
+              <span>Shortcuts</span>
+              <h2>My Repos</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item red">
+            <div class="item-top">
+              <div class="cmd"><code>cd "C:\Users\User\Desktop\Claude Docs\crimsonDel"</code></div>
+              <button class="copy-btn" data-copy='cd "C:\Users\User\Desktop\Claude Docs\crimsonDel"'>Copy</button>
+            </div>
+            <div class="desc"><strong>crimsonDel</strong> — Crimson Desert gear index · github.com/Delpedro/crimsonDel</div>
+          </div>
+
+          <div class="item red">
+            <div class="item-top">
+              <div class="cmd"><code>cd "C:\Users\User\Desktop\Claude Docs\Fitness"</code></div>
+              <button class="copy-btn" data-copy='cd "C:\Users\User\Desktop\Claude Docs\Fitness"'>Copy</button>
+            </div>
+            <div class="desc"><strong>Fitness</strong> — Fitness app · dels-montage repo</div>
+          </div>
+
+          <div class="item red">
+            <div class="item-top">
+              <div class="cmd"><code>cd "C:\Users\User\Desktop\Claude Docs\Genesys"</code></div>
+              <button class="copy-btn" data-copy='cd "C:\Users\User\Desktop\Claude Docs\Genesys"'>Copy</button>
+            </div>
+            <div class="desc"><strong>Genesys / sn-prep</strong> — ServiceNow interview prep · github.com/Delpedro/sn-prep</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card full" data-tags="tips">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <div class="dot" style="background: var(--amber);"></div>
+            <div>
+              <span>Reality checks</span>
+              <h2>Tips to Remember</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>Quotes matter</code></div>
+            </div>
+            <div class="desc">Folders with spaces need quotes, for example <strong>cd "Claude Docs"</strong>.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>The dot means current folder</code></div>
+            </div>
+            <div class="desc"><strong>docker build -t app .</strong> and <strong>git clone URL .</strong> both use the current folder.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>Push rejected? pull first</code></div>
+            </div>
+            <div class="desc">Usually <strong>git pull origin main --rebase</strong> then <strong>git push</strong>.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>Docker failing? check Docker Desktop first</code></div>
+            </div>
+            <div class="desc">Don’t debug your files before confirming Docker is actually running.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>npm start needs package.json</code></div>
+            </div>
+            <div class="desc">If package.json is missing, npm has nothing to run.</div>
+          </div>
+
+          <div class="item amber">
+            <div class="item-top">
+              <div class="cmd"><code>node_modules is local junk, not source code</code></div>
+            </div>
+            <div class="desc">Keep it out of Git with <strong>.gitignore</strong>.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <div class="empty" id="emptyState">No matching sections. Clear the search or switch filters.</div>
+
+    <div class="footer">
+      // Pedro’s dev operating manual · built to be fast when the brain is cooked
+    </div>
+  </main>
 
   <script>
     const searchInput = document.getElementById('searchInput');
-    const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
-    const cards = Array.from(document.querySelectorAll('.content .card'));
-    const sidePanels = Array.from(document.querySelectorAll('.sidebar .panel'));
-    const statusBar = document.getElementById('statusBar');
+    const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const quickCards = Array.from(document.querySelectorAll('.quick-card'));
+    const statusText = document.getElementById('statusText');
     const emptyState = document.getElementById('emptyState');
-
     let activeFilter = 'all';
 
     function normalize(text) {
@@ -998,51 +1231,65 @@
       return tags.includes(filter);
     }
 
-    function updateUI() {
+    function updateView() {
       const query = normalize(searchInput.value);
-      let visibleCards = 0;
+      let visibleCount = 0;
 
       cards.forEach(card => {
         const tags = normalize(card.dataset.tags || '');
         const text = normalize(card.innerText);
         const show = matchesFilter(tags, activeFilter) && text.includes(query);
         card.classList.toggle('hidden', !show);
-        if (show) visibleCards++;
+        if (show) visibleCount++;
       });
 
-      sidePanels.forEach(panel => {
-        const tags = normalize(panel.dataset.tags || '');
-        const text = normalize(panel.innerText);
+      quickCards.forEach(card => {
+        const tags = normalize(card.dataset.tags || '');
+        const text = normalize(card.innerText);
         const show = matchesFilter(tags, activeFilter) && text.includes(query);
-        panel.classList.toggle('hidden', !show);
+        card.classList.toggle('hidden', !show);
       });
 
-      emptyState.classList.toggle('hidden', visibleCards !== 0);
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
 
-      const filterLabel = activeFilter === 'all' ? 'all sections' : `"${activeFilter}"`;
-      if (query && activeFilter !== 'all') {
-        statusBar.textContent = `Showing ${filterLabel} filtered by "${searchInput.value}"`;
-      } else if (query) {
-        statusBar.textContent = `Searching all sections for "${searchInput.value}"`;
-      } else if (activeFilter !== 'all') {
-        statusBar.textContent = `Showing ${filterLabel}`;
+      if (activeFilter === 'all' && !query) {
+        statusText.textContent = 'Showing all sections';
+      } else if (activeFilter !== 'all' && !query) {
+        statusText.textContent = `Showing ${activeFilter} sections`;
+      } else if (activeFilter === 'all' && query) {
+        statusText.textContent = `Searching all sections for "${searchInput.value}"`;
       } else {
-        statusBar.textContent = 'Showing all sections';
+        statusText.textContent = `Showing ${activeFilter} sections for "${searchInput.value}"`;
       }
     }
 
-    tabButtons.forEach(btn => {
+    filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        tabButtons.forEach(b => b.classList.remove('active'));
+        filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeFilter = btn.dataset.filter;
-        updateUI();
+        updateView();
       });
     });
 
-    searchInput.addEventListener('input', updateUI);
+    searchInput.addEventListener('input', updateView);
 
-    updateUI();
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.getAttribute('data-copy');
+        try {
+          await navigator.clipboard.writeText(text);
+          const old = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(() => btn.textContent = old, 1000);
+        } catch {
+          btn.textContent = 'Failed';
+          setTimeout(() => btn.textContent = 'Copy', 1000);
+        }
+      });
+    });
+
+    updateView();
   </script>
 </body>
 </html>
