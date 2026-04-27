@@ -7,1028 +7,562 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --bg:       #0d1117;
-      --bg2:      #161b27;
-      --bg3:      #1e2535;
-      --border:   rgba(255,255,255,0.07);
-      --border2:  rgba(255,255,255,0.12);
-      --text:     #e6edf3;
-      --muted:    #8b949e;
-      --muted2:   #6b7280;
-      --c-green:  #22c55e;
-      --c-blue:   #3b82f6;
-      --c-amber:  #f59e0b;
-      --c-red:    #ef4444;
-      --c-purple: #a855f7;
-      --c-cyan:   #06b6d4;
-      --sidebar:  240px;
-      --radius:   10px;
+      --bg:      #0d1117;
+      --bg2:     #161b27;
+      --bg3:     #1e2535;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
+      --text:    #e6edf3;
+      --muted:   #8b949e;
+      --muted2:  #6b7280;
+      --green:   #22c55e;
+      --blue:    #3b82f6;
+      --amber:   #f59e0b;
+      --red:     #ef4444;
+      --purple:  #a855f7;
+      --cyan:    #06b6d4;
+      --sidebar: 220px;
+      --top:     54px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.6; }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    /* ── TOPBAR ── */
+    /* TOPBAR */
     .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 56px;
-      background: rgba(13,17,23,0.95);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 20px;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; height: var(--top);
+      background: rgba(13,17,23,0.96); border-bottom: 1px solid var(--border);
+      -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      display: flex; align-items: center; gap: 12px; padding: 0 16px; z-index: 100;
     }
-
-    .topbar-logo {
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--text);
-      white-space: nowrap;
+    .logo { font-weight: 700; font-size: 15px; white-space: nowrap; flex-shrink: 0; }
+    .logo span { color: var(--green); }
+    .stats { font-size: 11px; color: var(--muted2); font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+    .search-wrap { flex: 1; max-width: 420px; position: relative; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted2); pointer-events: none; }
+    #q {
+      width: 100%; background: var(--bg2); border: 1px solid var(--border2); color: var(--text);
+      border-radius: 9px; padding: 7px 11px 7px 32px; font-size: 13px; outline: none;
+      font-family: 'Inter', sans-serif; transition: border-color .15s;
+      -webkit-appearance: none; appearance: none;
     }
+    #q:focus { border-color: var(--blue); }
+    #q::placeholder { color: var(--muted2); }
 
-    .topbar-logo span { color: var(--c-green); }
+    /* LAYOUT */
+    .layout { display: flex; padding-top: var(--top); min-height: 100vh; }
 
-    .topbar-stats {
-      font-size: 12px;
-      color: var(--muted2);
-      font-family: 'JetBrains Mono', monospace;
-      white-space: nowrap;
-    }
-
-    .search-wrap {
-      flex: 1;
-      max-width: 480px;
-      position: relative;
-    }
-
-    .search-wrap svg {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted2);
-      pointer-events: none;
-    }
-
-    #searchInput {
-      width: 100%;
-      background: var(--bg2);
-      border: 1px solid var(--border2);
-      color: var(--text);
-      border-radius: var(--radius);
-      padding: 8px 12px 8px 38px;
-      font-size: 13px;
-      outline: none;
-      font-family: 'Inter', sans-serif;
-      transition: border-color 0.15s;
-    }
-
-    #searchInput:focus { border-color: var(--c-blue); }
-    #searchInput::placeholder { color: var(--muted2); }
-
-    .topbar-actions {
-      display: flex;
-      gap: 8px;
-      margin-left: auto;
-    }
-
-    /* ── LAYOUT ── */
-    .layout {
-      display: flex;
-      padding-top: 56px;
-      min-height: 100vh;
-    }
-
-    /* ── SIDEBAR ── */
+    /* SIDEBAR */
     .sidebar {
-      width: var(--sidebar);
-      flex-shrink: 0;
-      position: fixed;
-      top: 56px;
-      bottom: 0;
-      left: 0;
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-      background: var(--bg);
-      padding: 16px 0 80px;
+      width: var(--sidebar); flex-shrink: 0; position: fixed;
+      top: var(--top); bottom: 0; left: 0; overflow-y: auto;
+      border-right: 1px solid var(--border); background: var(--bg); padding: 12px 0 40px;
     }
-
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
-
-    .sidebar-label {
-      padding: 4px 16px 8px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted2);
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+    .sidebar-label { padding: 4px 14px 8px; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); }
+    .nav-btn {
+      display: flex; align-items: center; gap: 9px; padding: 8px 14px;
+      cursor: pointer; color: var(--muted); font-size: 13px;
+      border: none; background: none; width: 100%; text-align: left;
+      transition: background .12s, color .12s; -webkit-tap-highlight-color: transparent;
     }
+    .nav-btn:hover { background: var(--bg2); color: var(--text); }
+    .nav-btn.active { background: var(--bg2); color: var(--text); font-weight: 600; }
+    .nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .nav-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-count { font-size: 11px; color: var(--muted2); font-family: 'JetBrains Mono', monospace; }
+    .sidebar-add { margin: 8px 10px 0; width: calc(100% - 20px); }
 
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 16px;
-      cursor: pointer;
-      border-radius: 0;
-      transition: background 0.12s;
-      user-select: none;
-      color: var(--muted);
-      font-size: 13px;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
+    /* MAIN */
+    .main { margin-left: var(--sidebar); flex: 1; padding: 20px 22px 60px; min-width: 0; }
+
+    /* MOBILE FILTER STRIP */
+    .filter-strip {
+      display: none; overflow-x: auto; gap: 8px; padding: 9px 14px;
+      border-bottom: 1px solid var(--border); background: var(--bg);
+      position: fixed; top: var(--top); left: 0; right: 0; z-index: 90;
+      scrollbar-width: none;
     }
-
-    .nav-item:hover { background: var(--bg2); color: var(--text); }
-
-    .nav-item.active {
-      background: var(--bg2);
-      color: var(--text);
-      font-weight: 600;
+    .filter-strip::-webkit-scrollbar { display: none; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px;
+      border-radius: 20px; border: 1px solid var(--border2); background: var(--bg2);
+      color: var(--muted); font-size: 12px; font-weight: 600; white-space: nowrap;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all .12s;
+      -webkit-tap-highlight-color: transparent; border: none; flex-shrink: 0;
     }
+    .chip.active { background: rgba(59,130,246,.15); color: var(--blue); outline: 1px solid rgba(59,130,246,.4); }
 
-    .nav-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .nav-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    .nav-count {
-      font-size: 11px;
-      color: var(--muted2);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .sidebar-add {
-      margin: 8px 12px 0;
-      width: calc(100% - 24px);
-    }
-
-    /* ── MAIN ── */
-    .main {
-      margin-left: var(--sidebar);
-      flex: 1;
-      padding: 24px 28px 80px;
-      min-width: 0;
-    }
-
-    /* ── SECTION CARD ── */
-    .section-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 20px;
-      overflow: hidden;
-    }
-
-    .section-card.hidden { display: none; }
-
+    /* CARDS */
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+    .card.hidden { display: none; }
     .card-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
+      display: flex; align-items: center; gap: 11px; padding: 12px 15px;
+      border-bottom: 1px solid var(--border); background: rgba(255,255,255,.015);
     }
+    .accent { width: 4px; height: 28px; border-radius: 4px; flex-shrink: 0; }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-sub { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 1px; }
+    .card-title { font-size: 13px; font-weight: 700; }
+    .tag-pill { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; border: 1px solid var(--border2); color: var(--muted); background: var(--bg3); white-space: nowrap; }
+    .head-btns { display: flex; gap: 5px; }
 
-    .card-head-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
-      min-width: 0;
+    /* ITEMS */
+    .item {
+      display: flex; align-items: flex-start; gap: 10px; padding: 11px 15px;
+      border-bottom: 1px solid var(--border); transition: background .1s;
     }
-
-    .card-accent {
-      width: 4px;
-      height: 32px;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-
-    .card-title-block { min-width: 0; }
-
-    .card-subtitle {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-bottom: 2px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .card-tag {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      border: 1px solid var(--border2);
-      color: var(--muted);
-      background: var(--bg3);
-    }
-
-    .card-head-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    /* ── ITEMS ── */
-    .items-list { padding: 4px 0; }
-
-    .item-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 10px 18px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
-      position: relative;
-    }
-
-    .item-row:last-child { border-bottom: none; }
-    .item-row:hover { background: rgba(255,255,255,0.02); }
-    .item-row:hover .item-actions { opacity: 1; }
-
-    .item-type-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      margin-top: 7px;
-      flex-shrink: 0;
-    }
-
+    .item:last-child { border-bottom: none; }
+    .item:hover { background: rgba(255,255,255,.02); }
+    .item:hover .item-acts { opacity: 1; }
+    .item-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
     .item-body { flex: 1; min-width: 0; }
+    .item-cmd { display: block; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--text); word-break: break-all; line-height: 1.45; }
+    .item.concept .item-cmd { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); word-break: break-word; }
+    .item-desc { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+    .item-acts { display: flex; gap: 4px; flex-shrink: 0; opacity: 0; transition: opacity .1s; padding-top: 1px; }
 
-    .item-cmd {
-      display: block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12.5px;
-      color: var(--text);
-      word-break: break-word;
-      line-height: 1.4;
-    }
-
-    .item-row.type-concept .item-cmd {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .item-desc {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 3px;
-      line-height: 1.5;
-    }
-
-    .item-actions {
-      display: flex;
-      gap: 4px;
-      opacity: 0;
-      transition: opacity 0.1s;
-      flex-shrink: 0;
-      align-items: flex-start;
-      padding-top: 2px;
-    }
-
-    /* ── BUTTONS ── */
+    /* BUTTONS */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border2);
-      background: var(--bg3);
-      color: var(--muted);
-      transition: all 0.12s;
-      font-family: 'Inter', sans-serif;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 7px; font-size: 11px; font-weight: 600;
+      cursor: pointer; border: 1px solid var(--border2); background: var(--bg3);
+      color: var(--muted); transition: all .12s; font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent; white-space: nowrap;
     }
+    .btn:hover { color: var(--text); background: rgba(255,255,255,.07); }
+    .btn-icon { padding: 5px 7px; }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #2563eb; color: #fff; }
+    .btn-danger:hover { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.3); color: var(--red); }
+    .btn-green { color: var(--green); }
+    .btn-green:hover { background: rgba(34,197,94,.08); border-color: rgba(34,197,94,.3); color: var(--green); }
+    .copy-btn { flex-shrink: 0; }
+    .copy-btn.ok { color: var(--green); border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.06); }
+    .add-row { padding: 8px 15px; border-top: 1px dashed var(--border); }
 
-    .btn:hover { color: var(--text); border-color: var(--border2); background: rgba(255,255,255,0.06); }
-
-    .btn-icon {
-      padding: 5px 7px;
-      border-radius: 6px;
+    /* MODAL */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; align-items: center; justify-content: center; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: 14px; padding: 22px; width: 100%; max-width: 500px; margin: 16px; box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+    .modal h3 { font-size: 14px; font-weight: 700; margin-bottom: 18px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted2); margin-bottom: 5px; }
+    .field input, .field textarea {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border2); color: var(--text);
+      border-radius: 8px; padding: 8px 11px; font-size: 13px; font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color .15s; resize: vertical;
     }
-
-    .btn-primary {
-      background: var(--c-blue);
-      border-color: var(--c-blue);
-      color: #fff;
-    }
-
-    .btn-primary:hover { background: #2563eb; border-color: #2563eb; color: #fff; }
-
-    .btn-danger { color: var(--c-red); }
-    .btn-danger:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--c-red); }
-
-    .btn-green { color: var(--c-green); }
-    .btn-green:hover { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); color: var(--c-green); }
-
-    .copy-btn.copied { color: var(--c-green) !important; border-color: rgba(34,197,94,0.3) !important; }
-
-    .add-item-row {
-      padding: 8px 18px;
-      border-top: 1px dashed var(--border);
-    }
-
-    /* ── MODAL ── */
-    .modal-bg {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-bg.open { display: flex; }
-
-    .modal {
-      background: var(--bg2);
-      border: 1px solid var(--border2);
-      border-radius: 14px;
-      padding: 24px;
-      width: 100%;
-      max-width: 520px;
-      margin: 20px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-    }
-
-    .modal h3 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: var(--text);
-    }
-
-    .field { margin-bottom: 16px; }
-
-    .field label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      margin-bottom: 6px;
-    }
-
-    .field input, .field textarea, .field select {
-      width: 100%;
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      color: var(--text);
-      border-radius: var(--radius);
-      padding: 9px 12px;
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-      transition: border-color 0.15s;
-      resize: vertical;
-    }
-
-    .field input:focus, .field textarea:focus, .field select:focus {
-      border-color: var(--c-blue);
-    }
-
-    .field textarea { min-height: 72px; }
-
-    .field select option { background: var(--bg2); }
-
-    .type-toggle {
-      display: flex;
-      gap: 8px;
-    }
-
+    .field input:focus, .field textarea:focus { border-color: var(--blue); }
+    .field textarea { min-height: 68px; }
+    .type-toggle { display: flex; gap: 7px; }
     .type-opt {
-      flex: 1;
-      padding: 8px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border2);
-      background: var(--bg3);
-      color: var(--muted);
-      cursor: pointer;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      transition: all 0.12s;
-      font-family: 'Inter', sans-serif;
+      flex: 1; padding: 7px; border-radius: 8px; border: 1px solid var(--border2);
+      background: var(--bg3); color: var(--muted); cursor: pointer; text-align: center;
+      font-size: 12px; font-weight: 600; transition: all .12s; font-family: 'Inter', sans-serif;
     }
+    .type-opt.active { border-color: var(--blue); background: rgba(59,130,246,.12); color: var(--blue); }
+    .modal-foot { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
 
-    .type-opt.active {
-      border-color: var(--c-blue);
-      background: rgba(59,130,246,0.12);
-      color: var(--c-blue);
-    }
+    /* SECTION MODAL EXTRAS */
+    .color-row { display: flex; gap: 8px; }
+    .swatch { width: 26px; height: 26px; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: border-color .12s; }
+    .swatch.active { border-color: #fff; }
 
-    .modal-footer {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
+    /* EMPTY */
+    .empty { display: none; text-align: center; padding: 70px 20px; color: var(--muted2); }
+    .empty.show { display: block; }
+    .empty p { margin-top: 8px; font-size: 13px; }
 
-    /* ── SECTION MODAL ── */
-    .color-picker {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .color-swatch {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.12s;
-    }
-
-    .color-swatch.active { border-color: #fff; }
-
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      display: none;
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--muted2);
-    }
-
-    .empty-state.show { display: block; }
-    .empty-state p { margin-top: 8px; font-size: 13px; }
-
-    /* ── COLOR HELPERS ── */
-    .color-green  { background: var(--c-green); }
-    .color-blue   { background: var(--c-blue); }
-    .color-amber  { background: var(--c-amber); }
-    .color-red    { background: var(--c-red); }
-    .color-purple { background: var(--c-purple); }
-    .color-cyan   { background: var(--c-cyan); }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
-
+    /* MOBILE */
     @media (max-width: 768px) {
+      :root { --top: 52px; }
       .sidebar { display: none; }
-      .main { margin-left: 0; padding: 16px; }
-      .topbar-stats { display: none; }
+      .filter-strip { display: flex; }
+      .stats { display: none; }
+      .search-wrap { max-width: none; }
+      .main { margin-left: 0; padding: 12px 12px 40px; padding-top: calc(52px + 46px + 12px); }
+      .item-acts { opacity: 1; }
+      .btn-icon { padding: 6px 8px; }
     }
   </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <header class="topbar">
-  <div class="topbar-logo">Pedro's <span>Cheatsheet</span></div>
-  <div class="topbar-stats" id="statsText">loading…</div>
+  <div class="logo">Pedro's <span>Cheatsheet</span></div>
+  <div class="stats" id="stats"></div>
   <div class="search-wrap">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input id="searchInput" type="text" placeholder="Search commands…" autocomplete="off" />
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="q" type="search" placeholder="Search commands…" autocomplete="off" autocorrect="off" spellcheck="false" />
   </div>
 </header>
 
-<!-- LAYOUT -->
-<div class="layout">
+<div class="filter-strip" id="strip"></div>
 
-  <!-- SIDEBAR -->
-  <nav class="sidebar" id="sidebar">
+<div class="layout">
+  <nav class="sidebar">
     <div class="sidebar-label">Sections</div>
-    <div id="navList"></div>
-    <div style="padding: 12px 12px 0;">
-      <button class="btn btn-green sidebar-add" id="addSectionBtn">+ New section</button>
+    <div id="nav"></div>
+    <div style="padding:10px 10px 0">
+      <button class="btn btn-green sidebar-add" id="addSecBtn">+ New section</button>
     </div>
   </nav>
-
-  <!-- MAIN -->
-  <main class="main" id="mainContent">
-    <div id="sectionsContainer"></div>
-    <div class="empty-state" id="emptyState">
-      <div style="font-size:32px;">🔍</div>
-      <p>No results. Try a different search.</p>
-    </div>
+  <main class="main">
+    <div id="cards"></div>
+    <div class="empty" id="empty"><div style="font-size:26px">🔍</div><p>No results.</p></div>
   </main>
-
 </div>
 
 <!-- ITEM MODAL -->
-<div class="modal-bg" id="itemModal">
+<div class="overlay" id="itemModal">
   <div class="modal">
-    <h3 id="itemModalTitle">Add command</h3>
-    <div class="field">
-      <label>Command / Title</label>
-      <input id="itemCmd" type="text" placeholder="e.g. git status" />
-    </div>
-    <div class="field">
-      <label>Description</label>
-      <textarea id="itemDesc" placeholder="What does it do?"></textarea>
-    </div>
+    <h3 id="iTitle">Add command</h3>
+    <div class="field"><label>Command / Title</label><input id="iCmd" type="text" placeholder="e.g. git status" /></div>
+    <div class="field"><label>Description</label><textarea id="iDesc" placeholder="What does it do?"></textarea></div>
     <div class="field">
       <label>Type</label>
       <div class="type-toggle">
-        <button class="type-opt active" data-type="command" id="typeCmd">Command (copyable)</button>
-        <button class="type-opt" data-type="concept" id="typeConcept">Concept / note</button>
+        <button class="type-opt active" id="tCmd" data-t="command">Command (copyable)</button>
+        <button class="type-opt" id="tCon" data-t="concept">Concept / note</button>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" id="itemCancelBtn">Cancel</button>
-      <button class="btn btn-primary" id="itemSaveBtn">Save</button>
+    <div class="modal-foot">
+      <button class="btn" id="iCancel">Cancel</button>
+      <button class="btn btn-primary" id="iSave">Save</button>
     </div>
   </div>
 </div>
 
 <!-- SECTION MODAL -->
-<div class="modal-bg" id="sectionModal">
+<div class="overlay" id="secModal">
   <div class="modal">
-    <h3 id="sectionModalTitle">New section</h3>
+    <h3 id="sTitle">New section</h3>
+    <div class="field"><label>Title</label><input id="sName" type="text" placeholder="e.g. Git — Basics" /></div>
+    <div class="field"><label>Subtitle</label><input id="sSub" type="text" placeholder="e.g. Version control" /></div>
+    <div class="field"><label>Tag</label><input id="sTag" type="text" placeholder="e.g. git" /></div>
     <div class="field">
-      <label>Title</label>
-      <input id="secTitle" type="text" placeholder="e.g. Git — Basics" />
-    </div>
-    <div class="field">
-      <label>Subtitle</label>
-      <input id="secSubtitle" type="text" placeholder="e.g. Version control" />
-    </div>
-    <div class="field">
-      <label>Tag (for filtering)</label>
-      <input id="secTag" type="text" placeholder="e.g. git" />
-    </div>
-    <div class="field">
-      <label>Accent colour</label>
-      <div class="color-picker" id="colorPicker">
-        <div class="color-swatch color-green active" data-color="green"></div>
-        <div class="color-swatch color-blue" data-color="blue"></div>
-        <div class="color-swatch color-amber" data-color="amber"></div>
-        <div class="color-swatch color-red" data-color="red"></div>
-        <div class="color-swatch color-purple" data-color="purple"></div>
-        <div class="color-swatch color-cyan" data-color="cyan"></div>
+      <label>Colour</label>
+      <div class="color-row" id="swatches">
+        <div class="swatch active" style="background:#22c55e" data-c="green"></div>
+        <div class="swatch" style="background:#3b82f6" data-c="blue"></div>
+        <div class="swatch" style="background:#f59e0b" data-c="amber"></div>
+        <div class="swatch" style="background:#ef4444" data-c="red"></div>
+        <div class="swatch" style="background:#a855f7" data-c="purple"></div>
+        <div class="swatch" style="background:#06b6d4" data-c="cyan"></div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" id="secCancelBtn">Cancel</button>
-      <button class="btn btn-primary" id="secSaveBtn">Save section</button>
+    <div class="modal-foot">
+      <button class="btn" id="sCancel">Cancel</button>
+      <button class="btn btn-primary" id="sSave">Save section</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ── STATE ──
-  let data = { sections: [] };
-  let editItemState = null;  // { sectionId, itemId } or null (new)
-  let editSectionState = null;
-  let itemType = 'command';
-  let selectedColor = 'green';
+const SUPABASE_URL = 'https://bbkiwzbcxmlorcdhcwcc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_HZp8PpAz8eKlagAmBmV3kQ_SPO6x_KU';
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const COLORS = {
-    green:  '#22c55e',
-    blue:   '#3b82f6',
-    amber:  '#f59e0b',
-    red:    '#ef4444',
-    purple: '#a855f7',
-    cyan:   '#06b6d4',
-  };
+const COLORS = { green:'#22c55e', blue:'#3b82f6', amber:'#f59e0b', red:'#ef4444', purple:'#a855f7', cyan:'#06b6d4' };
+const cv = c => COLORS[c] || COLORS.blue;
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const uid = () => Math.random().toString(36).slice(2,10);
 
-  // ── UTILS ──
-  function uid() {
-    return Math.random().toString(36).slice(2, 10);
-  }
+let sections = [], items = [], activeFilter = 'all';
+let iState = null, sState = null, iType = 'command', sColor = 'green';
 
-  function colorVar(c) {
-    return COLORS[c] || COLORS.blue;
-  }
+// ── DATA ──
+async function load() {
+  const [sr, ir] = await Promise.all([
+    db.from('sections').select('*').order('sort_order'),
+    db.from('items').select('*').order('sort_order'),
+  ]);
+  sections = sr.data || [];
+  items = ir.data || [];
+  render();
+}
 
-  function esc(s) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+function secItems(sid) { return items.filter(i => i.section_id === sid); }
+function totalCount() { return items.length; }
 
-  function totalItems() {
-    return data.sections.reduce((n, s) => n + s.items.length, 0);
-  }
+// ── RENDER ──
+function render() {
+  renderNav(); renderStrip(); renderCards();
+  document.getElementById('stats').textContent = `${totalCount()} commands · ${sections.length} sections`;
+}
 
-  // ── FETCH / SAVE ──
-  async function loadData() {
-    const res = await fetch('/api/data');
-    data = await res.json();
-    render();
-  }
+function renderNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  mkNav(nav, 'all', 'rgba(255,255,255,.2)', 'All', totalCount());
+  [...new Set(sections.map(s => s.tag))].forEach(tag => {
+    const cnt = items.filter(i => { const s = sections.find(x=>x.id===i.section_id); return s?.tag===tag; }).length;
+    const col = sections.find(s=>s.tag===tag)?.color||'blue';
+    mkNav(nav, tag, cv(col), tag, cnt);
+  });
+}
 
-  async function saveData() {
-    await fetch('/api/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-  }
+function mkNav(parent, filter, dot, label, count) {
+  const b = document.createElement('button');
+  b.className = 'nav-btn' + (filter===activeFilter?' active':'');
+  b.dataset.filter = filter;
+  b.innerHTML = `<span class="nav-dot" style="background:${dot}"></span><span class="nav-name">${esc(label)}</span><span class="nav-count">${count}</span>`;
+  b.onclick = () => setFilter(filter);
+  parent.appendChild(b);
+}
 
-  // ── RENDER ──
-  function render() {
-    renderSidebar();
-    renderSections();
-    updateStats();
-  }
+function renderStrip() {
+  const strip = document.getElementById('strip');
+  strip.innerHTML = '';
+  mkChip(strip, 'all', 'rgba(255,255,255,.2)', 'All');
+  [...new Set(sections.map(s => s.tag))].forEach(tag => {
+    const col = sections.find(s=>s.tag===tag)?.color||'blue';
+    mkChip(strip, tag, cv(col), tag);
+  });
+}
 
-  function updateStats() {
-    const n = totalItems();
-    const s = data.sections.length;
-    document.getElementById('statsText').textContent = `${n} commands · ${s} sections`;
-  }
+function mkChip(parent, filter, dot, label) {
+  const b = document.createElement('button');
+  b.className = 'chip' + (filter===activeFilter?' active':'');
+  b.dataset.filter = filter;
+  b.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:${dot};display:inline-block"></span>${esc(label)}`;
+  b.onclick = () => setFilter(filter);
+  parent.appendChild(b);
+}
 
-  function renderSidebar() {
-    const nav = document.getElementById('navList');
-    nav.innerHTML = '';
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===f));
+  document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('active',b.dataset.filter===f));
+  applySearch();
+}
 
-    const all = document.createElement('button');
-    all.className = 'nav-item active';
-    all.dataset.filter = 'all';
-    all.innerHTML = `
-      <span class="nav-dot" style="background:rgba(255,255,255,0.2)"></span>
-      <span class="nav-name">All</span>
-      <span class="nav-count">${totalItems()}</span>
-    `;
-    all.addEventListener('click', () => setFilter('all', all));
-    nav.appendChild(all);
+function renderCards() {
+  const cont = document.getElementById('cards');
+  cont.innerHTML = '';
+  sections.forEach(sec => cont.appendChild(buildCard(sec)));
+  applySearch();
+}
 
-    const tags = [...new Set(data.sections.map(s => s.tag))];
-    tags.forEach(tag => {
-      const count = data.sections
-        .filter(s => s.tag === tag)
-        .reduce((n, s) => n + s.items.length, 0);
-      const color = data.sections.find(s => s.tag === tag)?.color || 'blue';
-      const btn = document.createElement('button');
-      btn.className = 'nav-item';
-      btn.dataset.filter = tag;
-      btn.innerHTML = `
-        <span class="nav-dot" style="background:${colorVar(color)}"></span>
-        <span class="nav-name">${esc(tag)}</span>
-        <span class="nav-count">${count}</span>
-      `;
-      btn.addEventListener('click', () => setFilter(tag, btn));
-      nav.appendChild(btn);
-    });
-  }
+function buildCard(sec) {
+  const its = secItems(sec.id);
+  const el = document.createElement('article');
+  el.className = 'card'; el.id = `s-${sec.id}`; el.dataset.tag = sec.tag;
 
-  let activeFilter = 'all';
-
-  function setFilter(tag, btnEl) {
-    activeFilter = tag;
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    btnEl.classList.add('active');
-    applySearch();
-  }
-
-  function renderSections() {
-    const container = document.getElementById('sectionsContainer');
-    container.innerHTML = '';
-    data.sections.forEach(sec => {
-      container.appendChild(buildSectionCard(sec));
-    });
-    applySearch();
-  }
-
-  function buildSectionCard(sec) {
-    const card = document.createElement('article');
-    card.className = 'section-card';
-    card.id = `sec-${sec.id}`;
-    card.dataset.tag = sec.tag;
-
-    card.innerHTML = `
-      <div class="card-head">
-        <div class="card-head-left">
-          <div class="card-accent color-${sec.color}"></div>
-          <div class="card-title-block">
-            <div class="card-subtitle">${esc(sec.subtitle || '')}</div>
-            <div class="card-title">${esc(sec.title)}</div>
-          </div>
-          <span class="card-tag">${esc(sec.tag)}</span>
-        </div>
-        <div class="card-head-actions">
-          <button class="btn btn-icon" title="Edit section" data-edit-sec="${sec.id}">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
-          <button class="btn btn-icon btn-danger" title="Delete section" data-del-sec="${sec.id}">
-            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-          </button>
-        </div>
+  el.innerHTML = `
+    <div class="card-head">
+      <div class="accent" style="background:${cv(sec.color)}"></div>
+      <div class="card-meta">
+        <div class="card-sub">${esc(sec.subtitle||'')}</div>
+        <div class="card-title">${esc(sec.title)}</div>
       </div>
-      <div class="items-list" id="items-${sec.id}">
-        ${sec.items.map(item => buildItemHTML(sec, item)).join('')}
+      <span class="tag-pill">${esc(sec.tag)}</span>
+      <div class="head-btns">
+        <button class="btn btn-icon" data-es="${sec.id}" title="Edit section"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="btn btn-icon btn-danger" data-ds="${sec.id}" title="Delete section"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
       </div>
-      <div class="add-item-row">
-        <button class="btn btn-green" data-add-item="${sec.id}">+ Add command</button>
+    </div>
+    <div class="items-list" id="il-${sec.id}">
+      ${its.map(item => itemHTML(sec, item)).join('')}
+    </div>
+    <div class="add-row">
+      <button class="btn btn-green" data-ai="${sec.id}">+ Add command</button>
+    </div>`;
+
+  el.querySelector(`[data-es]`).onclick = () => openEditSec(sec.id);
+  el.querySelector(`[data-ds]`).onclick = () => delSec(sec.id);
+  el.querySelector(`[data-ai]`).onclick = () => openAddItem(sec.id);
+  el.querySelectorAll('[data-copy]').forEach(b => b.onclick = () => doCopy(b));
+  el.querySelectorAll('[data-ei]').forEach(b => b.onclick = () => openEditItem(sec.id, b.dataset.ei));
+  el.querySelectorAll('[data-di]').forEach(b => b.onclick = () => delItem(b.dataset.di));
+  return el;
+}
+
+function itemHTML(sec, item) {
+  const isConcept = item.type === 'concept';
+  const copyBtn = isConcept ? '' : `<button class="btn copy-btn" data-copy="${esc(item.cmd)}">Copy</button>`;
+  return `
+    <div class="item ${isConcept?'concept':''}" data-iid="${item.id}">
+      <div class="item-dot" style="background:${isConcept?'rgba(255,255,255,.15)':cv(sec.color)}"></div>
+      <div class="item-body">
+        <span class="item-cmd">${esc(item.cmd)}</span>
+        <div class="item-desc">${esc(item.description||'')}</div>
       </div>
-    `;
+      ${copyBtn}
+      <div class="item-acts">
+        <button class="btn btn-icon" data-ei="${item.id}" title="Edit"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="btn btn-icon btn-danger" data-di="${item.id}" title="Delete"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>`;
+}
 
-    // Events
-    card.querySelector(`[data-edit-sec]`).addEventListener('click', () => openEditSection(sec.id));
-    card.querySelector(`[data-del-sec]`).addEventListener('click', () => deleteSection(sec.id));
-    card.querySelector(`[data-add-item]`).addEventListener('click', () => openAddItem(sec.id));
-    card.querySelectorAll('[data-copy-item]').forEach(btn => {
-      btn.addEventListener('click', () => copyItem(btn));
+// ── SEARCH ──
+function applySearch() {
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  let vis = 0;
+  sections.forEach(sec => {
+    const card = document.getElementById(`s-${sec.id}`);
+    if (!card) return;
+    if (activeFilter !== 'all' && sec.tag !== activeFilter) { card.classList.add('hidden'); return; }
+    if (!q) { card.classList.remove('hidden'); card.querySelectorAll('.item').forEach(r=>r.style.display=''); vis++; return; }
+    let show = sec.title.toLowerCase().includes(q);
+    card.querySelectorAll('.item').forEach(row => {
+      const id = row.dataset.iid;
+      const item = items.find(i=>i.id===id);
+      const m = item && (item.cmd.toLowerCase().includes(q)||(item.description||'').toLowerCase().includes(q));
+      row.style.display = m ? '' : 'none';
+      if (m) show = true;
     });
-    card.querySelectorAll('[data-edit-item]').forEach(btn => {
-      btn.addEventListener('click', () => openEditItem(sec.id, btn.dataset.editItem));
-    });
-    card.querySelectorAll('[data-del-item]').forEach(btn => {
-      btn.addEventListener('click', () => deleteItem(sec.id, btn.dataset.delItem));
-    });
-
-    return card;
-  }
-
-  function buildItemHTML(sec, item) {
-    const isConcept = item.type === 'concept';
-    const copyBtn = isConcept ? '' : `
-      <button class="btn btn-icon copy-btn" data-copy-item="${item.id}" data-cmd="${esc(item.cmd)}" title="Copy">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-      </button>`;
-
-    return `
-      <div class="item-row type-${item.type}" data-item-id="${item.id}">
-        <div class="item-type-dot" style="background:${isConcept ? 'rgba(255,255,255,0.15)' : colorVar(sec.color)}"></div>
-        <div class="item-body">
-          <span class="item-cmd">${esc(item.cmd)}</span>
-          <div class="item-desc">${esc(item.desc)}</div>
-        </div>
-        <div class="item-actions">
-          ${copyBtn}
-          <button class="btn btn-icon" data-edit-item="${item.id}" title="Edit">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
-          <button class="btn btn-icon btn-danger" data-del-item="${item.id}" title="Delete">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
-      </div>`;
-  }
-
-  // ── SEARCH / FILTER ──
-  function applySearch() {
-    const q = document.getElementById('searchInput').value.trim().toLowerCase();
-    let visible = 0;
-
-    data.sections.forEach(sec => {
-      const card = document.getElementById(`sec-${sec.id}`);
-      if (!card) return;
-
-      const tagMatch = activeFilter === 'all' || sec.tag === activeFilter;
-      if (!tagMatch) { card.classList.add('hidden'); return; }
-
-      if (!q) {
-        card.classList.remove('hidden');
-        card.querySelectorAll('.item-row').forEach(r => r.style.display = '');
-        visible++;
-        return;
-      }
-
-      let sectionVisible = false;
-      card.querySelectorAll('.item-row').forEach(row => {
-        const id = row.dataset.itemId;
-        const item = sec.items.find(i => i.id === id);
-        const match = item && (item.cmd.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q));
-        row.style.display = match ? '' : 'none';
-        if (match) sectionVisible = true;
-      });
-
-      if (sectionVisible || sec.title.toLowerCase().includes(q)) {
-        card.classList.remove('hidden');
-        visible++;
-      } else {
-        card.classList.add('hidden');
-      }
-    });
-
-    document.getElementById('emptyState').classList.toggle('show', visible === 0);
-  }
-
-  // ── COPY ──
-  function copyItem(btn) {
-    const text = btn.dataset.cmd;
-    navigator.clipboard.writeText(text).then(() => {
-      btn.classList.add('copied');
-      btn.title = 'Copied!';
-      setTimeout(() => { btn.classList.remove('copied'); btn.title = 'Copy'; }, 1200);
-    });
-  }
-
-  // ── ITEM MODAL ──
-  function setItemType(t) {
-    itemType = t;
-    document.getElementById('typeCmd').classList.toggle('active', t === 'command');
-    document.getElementById('typeConcept').classList.toggle('active', t === 'concept');
-  }
-
-  function openAddItem(sectionId) {
-    editItemState = { sectionId, itemId: null };
-    document.getElementById('itemModalTitle').textContent = 'Add command';
-    document.getElementById('itemCmd').value = '';
-    document.getElementById('itemDesc').value = '';
-    setItemType('command');
-    document.getElementById('itemModal').classList.add('open');
-    document.getElementById('itemCmd').focus();
-  }
-
-  function openEditItem(sectionId, itemId) {
-    const sec = data.sections.find(s => s.id === sectionId);
-    const item = sec?.items.find(i => i.id === itemId);
-    if (!item) return;
-    editItemState = { sectionId, itemId };
-    document.getElementById('itemModalTitle').textContent = 'Edit command';
-    document.getElementById('itemCmd').value = item.cmd;
-    document.getElementById('itemDesc').value = item.desc;
-    setItemType(item.type);
-    document.getElementById('itemModal').classList.add('open');
-    document.getElementById('itemCmd').focus();
-  }
-
-  function closeItemModal() {
-    document.getElementById('itemModal').classList.remove('open');
-    editItemState = null;
-  }
-
-  document.getElementById('itemCancelBtn').addEventListener('click', closeItemModal);
-  document.getElementById('typeCmd').addEventListener('click', () => setItemType('command'));
-  document.getElementById('typeConcept').addEventListener('click', () => setItemType('concept'));
-
-  document.getElementById('itemSaveBtn').addEventListener('click', () => {
-    const cmd = document.getElementById('itemCmd').value.trim();
-    const desc = document.getElementById('itemDesc').value.trim();
-    if (!cmd) return;
-
-    const { sectionId, itemId } = editItemState;
-    const sec = data.sections.find(s => s.id === sectionId);
-
-    if (itemId) {
-      const item = sec.items.find(i => i.id === itemId);
-      item.cmd = cmd;
-      item.desc = desc;
-      item.type = itemType;
-    } else {
-      sec.items.push({ id: uid(), cmd, desc, type: itemType });
-    }
-
-    closeItemModal();
-    saveData();
-    render();
+    card.classList.toggle('hidden', !show);
+    if (show) vis++;
   });
+  document.getElementById('empty').classList.toggle('show', vis===0);
+}
 
-  // ── DELETE ITEM ──
-  function deleteItem(sectionId, itemId) {
-    const sec = data.sections.find(s => s.id === sectionId);
-    sec.items = sec.items.filter(i => i.id !== itemId);
-    saveData();
-    render();
+// ── COPY ──
+function doCopy(btn) {
+  const text = btn.dataset.copy;
+  const done = () => { btn.textContent='Copied!'; btn.classList.add('ok'); setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('ok'); },1400); };
+  if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done).catch(done); }
+  else {
+    const ta = document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done();
   }
+}
 
-  // ── SECTION MODAL ──
-  function setSelectedColor(c) {
-    selectedColor = c;
-    document.querySelectorAll('.color-swatch').forEach(s => {
-      s.classList.toggle('active', s.dataset.color === c);
-    });
+// ── ITEM MODAL ──
+function setType(t) {
+  iType = t;
+  document.getElementById('tCmd').classList.toggle('active', t==='command');
+  document.getElementById('tCon').classList.toggle('active', t==='concept');
+}
+document.getElementById('tCmd').onclick = () => setType('command');
+document.getElementById('tCon').onclick = () => setType('concept');
+
+function openAddItem(sid) {
+  iState = { sid, id: null };
+  document.getElementById('iTitle').textContent = 'Add command';
+  document.getElementById('iCmd').value = '';
+  document.getElementById('iDesc').value = '';
+  setType('command');
+  document.getElementById('itemModal').classList.add('open');
+  document.getElementById('iCmd').focus();
+}
+
+function openEditItem(sid, id) {
+  const item = items.find(i=>i.id===id); if (!item) return;
+  iState = { sid, id };
+  document.getElementById('iTitle').textContent = 'Edit command';
+  document.getElementById('iCmd').value = item.cmd;
+  document.getElementById('iDesc').value = item.description||'';
+  setType(item.type);
+  document.getElementById('itemModal').classList.add('open');
+  document.getElementById('iCmd').focus();
+}
+
+function closeItemModal() { document.getElementById('itemModal').classList.remove('open'); iState=null; }
+document.getElementById('iCancel').onclick = closeItemModal;
+
+document.getElementById('iSave').onclick = async () => {
+  const cmd = document.getElementById('iCmd').value.trim();
+  const desc = document.getElementById('iDesc').value.trim();
+  if (!cmd) return;
+  const { sid, id } = iState;
+  if (id) {
+    await db.from('items').update({ cmd, description: desc, type: iType }).eq('id', id);
+    const item = items.find(i=>i.id===id);
+    item.cmd = cmd; item.description = desc; item.type = iType;
+  } else {
+    const newItem = { id: uid(), section_id: sid, cmd, description: desc, type: iType, sort_order: secItems(sid).length };
+    await db.from('items').insert(newItem);
+    items.push(newItem);
   }
+  closeItemModal(); render();
+};
 
-  document.querySelectorAll('.color-swatch').forEach(s => {
-    s.addEventListener('click', () => setSelectedColor(s.dataset.color));
-  });
+// ── DELETE ITEM ──
+async function delItem(id) {
+  await db.from('items').delete().eq('id', id);
+  items = items.filter(i=>i.id!==id);
+  render();
+}
 
-  function openAddSection() {
-    editSectionState = null;
-    document.getElementById('sectionModalTitle').textContent = 'New section';
-    document.getElementById('secTitle').value = '';
-    document.getElementById('secSubtitle').value = '';
-    document.getElementById('secTag').value = '';
-    setSelectedColor('green');
-    document.getElementById('sectionModal').classList.add('open');
-    document.getElementById('secTitle').focus();
+// ── SECTION MODAL ──
+document.querySelectorAll('.swatch').forEach(s => s.onclick = () => {
+  sColor = s.dataset.c;
+  document.querySelectorAll('.swatch').forEach(x=>x.classList.toggle('active', x.dataset.c===sColor));
+});
+
+document.getElementById('addSecBtn').onclick = openAddSec;
+
+function openAddSec() {
+  sState = null;
+  document.getElementById('sTitle').textContent = 'New section';
+  document.getElementById('sName').value=''; document.getElementById('sSub').value=''; document.getElementById('sTag').value='';
+  sColor='green'; document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.c==='green'));
+  document.getElementById('secModal').classList.add('open');
+  document.getElementById('sName').focus();
+}
+
+function openEditSec(id) {
+  const sec = sections.find(s=>s.id===id); if (!sec) return;
+  sState = id;
+  document.getElementById('sTitle').textContent = 'Edit section';
+  document.getElementById('sName').value=sec.title; document.getElementById('sSub').value=sec.subtitle||''; document.getElementById('sTag').value=sec.tag;
+  sColor=sec.color; document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('active',s.dataset.c===sec.color));
+  document.getElementById('secModal').classList.add('open');
+  document.getElementById('sName').focus();
+}
+
+function closeSecModal() { document.getElementById('secModal').classList.remove('open'); sState=null; }
+document.getElementById('sCancel').onclick = closeSecModal;
+
+document.getElementById('sSave').onclick = async () => {
+  const title = document.getElementById('sName').value.trim();
+  const subtitle = document.getElementById('sSub').value.trim();
+  const tag = document.getElementById('sTag').value.trim()||'misc';
+  if (!title) return;
+  if (sState) {
+    await db.from('sections').update({ title, subtitle, tag, color: sColor }).eq('id', sState);
+    const sec = sections.find(s=>s.id===sState);
+    sec.title=title; sec.subtitle=subtitle; sec.tag=tag; sec.color=sColor;
+  } else {
+    const newSec = { id: uid(), title, subtitle, tag, color: sColor, sort_order: sections.length };
+    await db.from('sections').insert(newSec);
+    sections.push(newSec);
   }
+  closeSecModal(); render();
+};
 
-  function openEditSection(sectionId) {
-    const sec = data.sections.find(s => s.id === sectionId);
-    if (!sec) return;
-    editSectionState = sectionId;
-    document.getElementById('sectionModalTitle').textContent = 'Edit section';
-    document.getElementById('secTitle').value = sec.title;
-    document.getElementById('secSubtitle').value = sec.subtitle || '';
-    document.getElementById('secTag').value = sec.tag;
-    setSelectedColor(sec.color);
-    document.getElementById('sectionModal').classList.add('open');
-    document.getElementById('secTitle').focus();
+// ── DELETE SECTION ──
+async function delSec(id) {
+  const sec = sections.find(s=>s.id===id);
+  if (!confirm(`Delete "${sec.title}" and all its commands?`)) return;
+  await db.from('sections').delete().eq('id', id);
+  sections = sections.filter(s=>s.id!==id);
+  items = items.filter(i=>i.section_id!==id);
+  render();
+}
+
+// ── CLOSE ON BG CLICK / ESC ──
+document.getElementById('itemModal').onclick = e => { if(e.target===e.currentTarget) closeItemModal(); };
+document.getElementById('secModal').onclick = e => { if(e.target===e.currentTarget) closeSecModal(); };
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') { closeItemModal(); closeSecModal(); }
+  if (e.key==='/' && document.activeElement.tagName!=='INPUT' && document.activeElement.tagName!=='TEXTAREA') {
+    e.preventDefault(); document.getElementById('q').focus();
   }
+});
 
-  function closeSectionModal() {
-    document.getElementById('sectionModal').classList.remove('open');
-    editSectionState = null;
-  }
+document.getElementById('q').addEventListener('input', applySearch);
 
-  document.getElementById('addSectionBtn').addEventListener('click', openAddSection);
-  document.getElementById('secCancelBtn').addEventListener('click', closeSectionModal);
-
-  document.getElementById('secSaveBtn').addEventListener('click', () => {
-    const title = document.getElementById('secTitle').value.trim();
-    const subtitle = document.getElementById('secSubtitle').value.trim();
-    const tag = document.getElementById('secTag').value.trim();
-    if (!title) return;
-
-    if (editSectionState) {
-      const sec = data.sections.find(s => s.id === editSectionState);
-      sec.title = title;
-      sec.subtitle = subtitle;
-      sec.tag = tag;
-      sec.color = selectedColor;
-    } else {
-      data.sections.push({
-        id: uid(),
-        title,
-        subtitle,
-        tag: tag || 'misc',
-        color: selectedColor,
-        items: [],
-      });
-    }
-
-    closeSectionModal();
-    saveData();
-    render();
-  });
-
-  // ── DELETE SECTION ──
-  function deleteSection(sectionId) {
-    const sec = data.sections.find(s => s.id === sectionId);
-    if (!confirm(`Delete "${sec.title}" and all its commands?`)) return;
-    data.sections = data.sections.filter(s => s.id !== sectionId);
-    saveData();
-    render();
-  }
-
-  // ── SEARCH INPUT ──
-  document.getElementById('searchInput').addEventListener('input', applySearch);
-
-  // ── KEYBOARD SHORTCUT: / to focus search ──
-  document.addEventListener('keydown', e => {
-    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-      e.preventDefault();
-      document.getElementById('searchInput').focus();
-    }
-    if (e.key === 'Escape') {
-      closeItemModal();
-      closeSectionModal();
-    }
-  });
-
-  // ── CLOSE MODAL ON BG CLICK ──
-  document.getElementById('itemModal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeItemModal();
-  });
-  document.getElementById('sectionModal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeSectionModal();
-  });
-
-  // ── INIT ──
-  loadData();
+load();
 </script>
 </body>
 </html>
