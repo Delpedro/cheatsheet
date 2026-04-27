@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedro's Cheatsheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #0d1117;
+      --bg2:      #161b27;
+      --bg3:      #1e2535;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.12);
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --muted2:   #6b7280;
+      --c-green:  #22c55e;
+      --c-blue:   #3b82f6;
+      --c-amber:  #f59e0b;
+      --c-red:    #ef4444;
+      --c-purple: #a855f7;
+      --c-cyan:   #06b6d4;
+      --sidebar:  220px;
+      --topbar:   56px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar);
+      background: rgba(13,17,23,0.96);
+      border-bottom: 1px solid var(--border);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 16px;
+      z-index: 100;
+    }
+
+    .topbar-logo {
+      font-weight: 700;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    .topbar-logo span { color: var(--c-green); }
+
+    .topbar-stats {
+      font-size: 11px;
+      color: var(--muted2);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 440px;
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted2);
+      pointer-events: none;
+    }
+    #searchInput {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 12px 8px 34px;
+      font-size: 13px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    #searchInput:focus { border-color: var(--c-blue); }
+    #searchInput::placeholder { color: var(--muted2); }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: var(--topbar);
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar);
+      flex-shrink: 0;
+      position: fixed;
+      top: var(--topbar);
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+      padding: 12px 0 40px;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+
+    .sidebar-label {
+      padding: 4px 14px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 14px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.12s, color 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-item:hover { background: var(--bg2); color: var(--text); }
+    .nav-item.active { background: var(--bg2); color: var(--text); font-weight: 600; }
+
+    .nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .nav-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-count { font-size: 11px; color: var(--muted2); font-family: 'JetBrains Mono', monospace; }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      padding: 20px 24px 60px;
+      min-width: 0;
+    }
+
+    /* ── MOBILE FILTER STRIP (hidden on desktop) ── */
+    .filter-strip {
+      display: none;
+      overflow-x: auto;
+      gap: 8px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: fixed;
+      top: var(--topbar);
+      left: 0; right: 0;
+      z-index: 90;
+      scrollbar-width: none;
+    }
+    .filter-strip::-webkit-scrollbar { display: none; }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border2);
+      background: var(--bg2);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.12s;
+    }
+    .filter-chip.active {
+      background: rgba(59,130,246,0.15);
+      border-color: rgba(59,130,246,0.4);
+      color: var(--c-blue);
+    }
+
+    /* ── SECTION CARD ── */
+    .section-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .section-card.hidden { display: none; }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.015);
+    }
+    .card-accent { width: 4px; height: 28px; border-radius: 4px; flex-shrink: 0; }
+    .card-title-block { flex: 1; min-width: 0; }
+    .card-subtitle {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 1px;
+    }
+    .card-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .card-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      background: var(--bg3);
+      white-space: nowrap;
+    }
+
+    /* ── ITEMS ── */
+    .items-list { padding: 2px 0; }
+
+    .item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .item-row:last-child { border-bottom: none; }
+    .item-row:active { background: rgba(255,255,255,0.025); }
+
+    .item-type-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .item-body { flex: 1; min-width: 0; }
+
+    .item-cmd {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text);
+      word-break: break-all;
+      line-height: 1.45;
+    }
+    .item-row.type-concept .item-cmd {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      word-break: break-word;
+    }
+    .item-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    /* ── COPY BUTTON ── */
+    .copy-btn {
+      flex-shrink: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      border-radius: 7px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.12s;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      margin-top: 1px;
+    }
+    .copy-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .copy-btn.copied { color: var(--c-green); border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.06); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted2);
+    }
+    .empty-state.show { display: block; }
+    .empty-state p { margin-top: 8px; font-size: 13px; }
+
+    /* ── COLOR HELPERS ── */
+    .color-green  { background: var(--c-green); }
+    .color-blue   { background: var(--c-blue); }
+    .color-amber  { background: var(--c-amber); }
+    .color-red    { background: var(--c-red); }
+    .color-purple { background: var(--c-purple); }
+    .color-cyan   { background: var(--c-cyan); }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      :root { --topbar: 52px; }
+
+      .sidebar { display: none; }
+      .filter-strip { display: flex; }
+
+      .main {
+        margin-left: 0;
+        padding: 12px 12px 40px;
+        padding-top: calc(52px + 48px + 12px); /* topbar + filter strip + gap */
+      }
+
+      .topbar { padding: 0 14px; gap: 10px; }
+      .topbar-stats { display: none; }
+      .search-wrap { max-width: none; }
+
+      .card-head { padding: 10px 13px; }
+      .item-row { padding: 12px 13px; }
+
+      /* Bigger tap targets on mobile */
+      .copy-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-height: 36px;
+      }
+
+      .item-cmd { font-size: 12px; }
+      .item-desc { font-size: 12px; }
+    }
+
+    @media (max-width: 420px) {
+      .main { padding-left: 10px; padding-right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-logo">Pedro's <span>Cheatsheet</span></div>
+  <div class="topbar-stats" id="statsText"></div>
+  <div class="search-wrap">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="searchInput" type="search" placeholder="Search commands…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+  </div>
+</header>
+
+<!-- MOBILE FILTER STRIP -->
+<div class="filter-strip" id="filterStrip"></div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR (desktop) -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-label">Sections</div>
+    <div id="navList"></div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main" id="mainContent">
+    <div id="sectionsContainer"></div>
+    <div class="empty-state" id="emptyState">
+      <div style="font-size:28px">🔍</div>
+      <p>No results. Try a different search.</p>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  const COLORS = {
+    green:  '#22c55e',
+    blue:   '#3b82f6',
+    amber:  '#f59e0b',
+    red:    '#ef4444',
+    purple: '#a855f7',
+    cyan:   '#06b6d4',
+  };
+
+  let data = { sections: [] };
+  let activeFilter = 'all';
+
+  function colorVal(c) { return COLORS[c] || COLORS.blue; }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function totalItems() {
+    return data.sections.reduce((n, s) => n + s.items.length, 0);
+  }
+
+  async function loadData() {
+    const res = await fetch('./data/commands.json');
+    data = await res.json();
+    render();
+  }
+
+  function render() {
+    renderSidebar();
+    renderFilterStrip();
+    renderSections();
+    document.getElementById('statsText').textContent =
+      `${totalItems()} commands · ${data.sections.length} sections`;
+  }
+
+  function renderSidebar() {
+    const nav = document.getElementById('navList');
+    nav.innerHTML = '';
+    buildNavItem(nav, 'all', 'rgba(255,255,255,0.2)', 'All', totalItems());
+    const tags = [...new Set(data.sections.map(s => s.tag))];
+    tags.forEach(tag => {
+      const count = data.sections.filter(s => s.tag === tag).reduce((n, s) => n + s.items.length, 0);
+      const color = data.sections.find(s => s.tag === tag)?.color || 'blue';
+      buildNavItem(nav, tag, colorVal(color), tag, count);
+    });
+  }
+
+  function buildNavItem(parent, filter, dotColor, label, count) {
+    const btn = document.createElement('button');
+    btn.className = 'nav-item' + (filter === activeFilter ? ' active' : '');
+    btn.dataset.filter = filter;
+    btn.innerHTML = `
+      <span class="nav-dot" style="background:${dotColor}"></span>
+      <span class="nav-name">${esc(label)}</span>
+      <span class="nav-count">${count}</span>`;
+    btn.addEventListener('click', () => setFilter(filter));
+    parent.appendChild(btn);
+  }
+
+  function renderFilterStrip() {
+    const strip = document.getElementById('filterStrip');
+    strip.innerHTML = '';
+    buildChip(strip, 'all', 'rgba(255,255,255,0.2)', 'All');
+    const tags = [...new Set(data.sections.map(s => s.tag))];
+    tags.forEach(tag => {
+      const color = data.sections.find(s => s.tag === tag)?.color || 'blue';
+      buildChip(strip, tag, colorVal(color), tag);
+    });
+  }
+
+  function buildChip(parent, filter, dotColor, label) {
+    const chip = document.createElement('button');
+    chip.className = 'filter-chip' + (filter === activeFilter ? ' active' : '');
+    chip.dataset.filter = filter;
+    chip.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:${dotColor};flex-shrink:0;display:inline-block"></span>${esc(label)}`;
+    chip.addEventListener('click', () => setFilter(filter));
+    parent.appendChild(chip);
+  }
+
+  function setFilter(tag) {
+    activeFilter = tag;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.filter === tag));
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b.dataset.filter === tag));
+    applySearch();
+  }
+
+  function renderSections() {
+    const container = document.getElementById('sectionsContainer');
+    container.innerHTML = '';
+    data.sections.forEach(sec => container.appendChild(buildCard(sec)));
+    applySearch();
+  }
+
+  function buildCard(sec) {
+    const card = document.createElement('article');
+    card.className = 'section-card';
+    card.id = `sec-${sec.id}`;
+    card.dataset.tag = sec.tag;
+
+    const itemsHTML = sec.items.map(item => {
+      const isConcept = item.type === 'concept';
+      const copyBtn = isConcept ? '' : `
+        <button class="copy-btn" data-cmd="${esc(item.cmd)}">Copy</button>`;
+      return `
+        <div class="item-row type-${item.type}">
+          <div class="item-type-dot" style="background:${isConcept ? 'rgba(255,255,255,0.15)' : colorVal(sec.color)}"></div>
+          <div class="item-body">
+            <span class="item-cmd">${esc(item.cmd)}</span>
+            <div class="item-desc">${esc(item.desc)}</div>
+          </div>
+          ${copyBtn}
+        </div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="card-head">
+        <div class="card-accent color-${sec.color}"></div>
+        <div class="card-title-block">
+          <div class="card-subtitle">${esc(sec.subtitle || '')}</div>
+          <div class="card-title">${esc(sec.title)}</div>
+        </div>
+        <span class="card-tag">${esc(sec.tag)}</span>
+      </div>
+      <div class="items-list">${itemsHTML}</div>`;
+
+    card.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = btn.dataset.cmd;
+        navigator.clipboard.writeText(text).then(() => {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1400);
+        }).catch(() => {
+          // fallback for older iOS
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus(); ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1400);
+        });
+      });
+    });
+
+    return card;
+  }
+
+  function applySearch() {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    let visible = 0;
+
+    data.sections.forEach(sec => {
+      const card = document.getElementById(`sec-${sec.id}`);
+      if (!card) return;
+      if (activeFilter !== 'all' && sec.tag !== activeFilter) {
+        card.classList.add('hidden'); return;
+      }
+      if (!q) {
+        card.classList.remove('hidden');
+        card.querySelectorAll('.item-row').forEach(r => r.style.display = '');
+        visible++; return;
+      }
+      let secVisible = sec.title.toLowerCase().includes(q);
+      card.querySelectorAll('.item-row').forEach((row, i) => {
+        const item = sec.items[i];
+        const match = item && (item.cmd.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q));
+        row.style.display = match ? '' : 'none';
+        if (match) secVisible = true;
+      });
+      card.classList.toggle('hidden', !secVisible);
+      if (secVisible) visible++;
+    });
+
+    document.getElementById('emptyState').classList.toggle('show', visible === 0);
+  }
+
+  document.getElementById('searchInput').addEventListener('input', applySearch);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+  });
+
+  loadData();
+</script>
+</body>
+</html>
