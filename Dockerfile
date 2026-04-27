@@ -1,15 +1,22 @@
-# HOW TO USE (no docker-compose here, run these commands manually):
+# HOW TO USE:
 #   Build the image:   docker build -t cheatsheet .
-#   Run the container: docker run -d -p 8081:80 --name cheatsheet cheatsheet
+#   Run the container: docker run -d -p 3000:3000 --name cheatsheet cheatsheet
 #   Stop it:           docker stop cheatsheet
 #   Remove it:         docker rm cheatsheet
-#   Site runs at:      http://localhost:8081
+#   Site runs at:      http://localhost:3000
 #
-# Note: unlike docker-compose, this COPIES files at build time.
-# If you change a file, you need to rebuild: docker build -t cheatsheet .
+# Note: files are COPIED at build time.
+# If you change a file, rebuild: docker build -t cheatsheet .
 
-FROM nginx:alpine
+FROM node:20-alpine
 
-COPY . /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+COPY package*.json ./
+RUN npm install --production
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]

@@ -1,0 +1,175 @@
+{
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Most Useful Workflows",
+      "subtitle": "Core flows",
+      "tag": "quick",
+      "color": "purple",
+      "items": [
+        { "id": "i1", "cmd": "Build fast → use npm", "desc": "Use npm / live-server while editing so changes show instantly.", "type": "concept" },
+        { "id": "i2", "cmd": "Verify cleanly → use Docker", "desc": "Use Docker when you want the site checked in a fresh environment.", "type": "concept" },
+        { "id": "i3", "cmd": "npm setup → install → script → start", "desc": "npm init -y → npm install live-server --save-dev → add \"start\": \"live-server\" → npm start.", "type": "concept" },
+        { "id": "i4", "cmd": "Docker setup → build → remove old → run new", "desc": "Open Docker Desktop → docker build -t cheatsheet-site . → docker rm -f cheatsheet-container → docker run -d -p 8081:80 --name cheatsheet-container cheatsheet-site.", "type": "concept" },
+        { "id": "i5", "cmd": "Push rejected? pull --rebase → push", "desc": "If remote changed, rebase your local commit on top, then push.", "type": "concept" }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Terminal / Navigation",
+      "subtitle": "CLI basics",
+      "tag": "terminal",
+      "color": "green",
+      "items": [
+        { "id": "i6", "cmd": "dir", "desc": "List files in current folder (Windows CMD).", "type": "command" },
+        { "id": "i7", "cmd": "ls", "desc": "List files in current folder (PowerShell / bash).", "type": "command" },
+        { "id": "i8", "cmd": "cd ..", "desc": "Go up one folder level.", "type": "command" },
+        { "id": "i9", "cmd": "cd FolderName", "desc": "Go into a folder.", "type": "command" },
+        { "id": "i10", "cmd": "cd \"Claude Docs\\Genesys\"", "desc": "Use quotes when a folder name contains spaces.", "type": "command" },
+        { "id": "i11", "cmd": "code .", "desc": "Open the current folder in VS Code.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Git — Basics",
+      "subtitle": "Version control",
+      "tag": "git",
+      "color": "blue",
+      "items": [
+        { "id": "i12", "cmd": "git status", "desc": "Check what changed and whether your branch is clean.", "type": "command" },
+        { "id": "i13", "cmd": "git add -A", "desc": "Stage everything: new, changed, and deleted files.", "type": "command" },
+        { "id": "i14", "cmd": "git commit -m \"your message\"", "desc": "Create a local snapshot with a useful message.", "type": "command" },
+        { "id": "i15", "cmd": "git push", "desc": "Send local commits to GitHub.", "type": "command" },
+        { "id": "i16", "cmd": "git pull", "desc": "Bring remote changes into your local repo.", "type": "command" },
+        { "id": "i17", "cmd": "git diff", "desc": "See exactly what changed before committing.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Git — Branches & Fixes",
+      "subtitle": "Recovery / hygiene",
+      "tag": "git",
+      "color": "amber",
+      "items": [
+        { "id": "i18", "cmd": "git branch", "desc": "Check which branch you're on. You usually want * main.", "type": "command" },
+        { "id": "i19", "cmd": "git checkout main", "desc": "Switch to the main branch.", "type": "command" },
+        { "id": "i20", "cmd": "git pull origin main --rebase", "desc": "Best fix when push is rejected because remote moved ahead.", "type": "command" },
+        { "id": "i21", "cmd": "git rebase --continue", "desc": "Continue after fixing a rebase conflict.", "type": "command" },
+        { "id": "i22", "cmd": "git remote prune origin", "desc": "Clean up deleted remote branches from your local list.", "type": "command" },
+        { "id": "i23", "cmd": "git restore index.html", "desc": "Discard uncommitted changes in one file.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s5",
+      "title": "Docker — Setup & Run",
+      "subtitle": "Container setup",
+      "tag": "docker",
+      "color": "cyan",
+      "items": [
+        { "id": "i24", "cmd": "Install Docker Desktop", "desc": "Docker Desktop is required on Windows to run Docker containers.", "type": "concept" },
+        { "id": "i25", "cmd": "Open Docker Desktop", "desc": "Wait until Docker is fully running before typing Docker CLI commands.", "type": "concept" },
+        { "id": "i26", "cmd": "docker --version", "desc": "Check Docker is installed and available in terminal.", "type": "command" },
+        { "id": "i27", "cmd": "docker run hello-world", "desc": "Quick test to confirm Docker can run a container.", "type": "command" },
+        { "id": "i28", "cmd": "FROM nginx:alpine", "desc": "Use nginx as a lightweight static site server in your Dockerfile.", "type": "command" },
+        { "id": "i29", "cmd": "COPY index.html /usr/share/nginx/html/index.html", "desc": "Copy your site file into nginx's web root.", "type": "command" },
+        { "id": "i30", "cmd": "EXPOSE 80", "desc": "Document the container port used by nginx.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s6",
+      "title": "Docker — Commands",
+      "subtitle": "Commands",
+      "tag": "docker",
+      "color": "blue",
+      "items": [
+        { "id": "i31", "cmd": "docker build -t cheatsheet-site .", "desc": "Build an image from the current folder.", "type": "command" },
+        { "id": "i32", "cmd": "docker run -d -p 8081:80 --name cheatsheet-container cheatsheet-site", "desc": "Run the container in the background, map localhost:8081 to port 80.", "type": "command" },
+        { "id": "i33", "cmd": "docker ps", "desc": "See running containers.", "type": "command" },
+        { "id": "i34", "cmd": "docker stop cheatsheet-container", "desc": "Stop the running container.", "type": "command" },
+        { "id": "i35", "cmd": "docker start cheatsheet-container", "desc": "Restart the old container. Does not rebuild new file changes.", "type": "command" },
+        { "id": "i36", "cmd": "docker rm -f cheatsheet-container", "desc": "Delete existing container before recreating it.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s7",
+      "title": "Docker — Mental Model",
+      "subtitle": "Mental model",
+      "tag": "docker",
+      "color": "purple",
+      "items": [
+        { "id": "i37", "cmd": "Image = saved snapshot", "desc": "The built version of your app at a moment in time.", "type": "concept" },
+        { "id": "i38", "cmd": "Container = running copy", "desc": "A live instance running from that image.", "type": "concept" },
+        { "id": "i39", "cmd": "docker start = reuse old version", "desc": "Starting an old container does not pull in your new edits.", "type": "concept" },
+        { "id": "i40", "cmd": "Edit file → rebuild → rerun", "desc": "That's why Docker feels slower than npm for normal editing.", "type": "concept" }
+      ]
+    },
+    {
+      "id": "s8",
+      "title": "npm — Setup & Run",
+      "subtitle": "Local dev",
+      "tag": "npm",
+      "color": "green",
+      "items": [
+        { "id": "i41", "cmd": "npm init -y", "desc": "Create a default package.json in the current folder.", "type": "command" },
+        { "id": "i42", "cmd": "npm install live-server --save-dev", "desc": "Install live-server as a local dev dependency.", "type": "command" },
+        { "id": "i43", "cmd": "\"start\": \"live-server\"", "desc": "Add this inside the scripts section in package.json.", "type": "concept" },
+        { "id": "i44", "cmd": "npm start", "desc": "Run the local dev server using the start script.", "type": "command" },
+        { "id": "i45", "cmd": "Ctrl + C", "desc": "Stop the running server in terminal.", "type": "concept" },
+        { "id": "i46", "cmd": "npx live-server", "desc": "Quick fallback if you want to run without setting up a start script first.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s9",
+      "title": "npm — package.json",
+      "subtitle": "Package file",
+      "tag": "npm",
+      "color": "green",
+      "items": [
+        { "id": "i47", "cmd": "{ \"scripts\": { \"start\": \"live-server\" } }", "desc": "Minimal version needed for npm start to work.", "type": "concept" },
+        { "id": "i48", "cmd": "npm run", "desc": "See which scripts currently exist in package.json.", "type": "command" },
+        { "id": "i49", "cmd": "Missing script: \"start\"", "desc": "package.json exists, but the start script does not.", "type": "concept" }
+      ]
+    },
+    {
+      "id": "s10",
+      "title": "npm vs Docker",
+      "subtitle": "Decision making",
+      "tag": "npm",
+      "color": "purple",
+      "items": [
+        { "id": "i50", "cmd": "npm = local development", "desc": "Fast, simple, instant refresh. Best while building.", "type": "concept" },
+        { "id": "i51", "cmd": "Docker = container testing", "desc": "Closer to a clean deployment environment. Best for verification.", "type": "concept" },
+        { "id": "i52", "cmd": "Use npm while building", "desc": "Edit → save → see changes immediately.", "type": "concept" },
+        { "id": "i53", "cmd": "Use Docker to verify", "desc": "Rebuild and run a fresh container to verify the site still works cleanly.", "type": "concept" }
+      ]
+    },
+    {
+      "id": "s11",
+      "title": "My Repos",
+      "subtitle": "Shortcuts",
+      "tag": "repos",
+      "color": "red",
+      "items": [
+        { "id": "i54", "cmd": "cd \"C:\\Users\\User\\Desktop\\Claude Docs\\crimsonDel\"", "desc": "crimsonDel — Crimson Desert gear index · github.com/Delpedro/crimsonDel", "type": "command" },
+        { "id": "i55", "cmd": "cd \"C:\\Users\\User\\Desktop\\Claude Docs\\Fitness\"", "desc": "Fitness — Fitness app · dels-montage repo", "type": "command" },
+        { "id": "i56", "cmd": "cd \"C:\\Users\\User\\Desktop\\Claude Docs\\Genesys\"", "desc": "Genesys / sn-prep — ServiceNow interview prep · github.com/Delpedro/sn-prep", "type": "command" },
+        { "id": "i57", "cmd": "cd \"C:\\Users\\User\\Desktop\\Claude Docs\\cheatsheet\"", "desc": "cheatsheet — This very app.", "type": "command" }
+      ]
+    },
+    {
+      "id": "s12",
+      "title": "Tips to Remember",
+      "subtitle": "Reality checks",
+      "tag": "tips",
+      "color": "amber",
+      "items": [
+        { "id": "i58", "cmd": "Quotes matter", "desc": "Folders with spaces need quotes: cd \"Claude Docs\".", "type": "concept" },
+        { "id": "i59", "cmd": "The dot means current folder", "desc": "docker build -t app . and git clone URL . both use the current folder.", "type": "concept" },
+        { "id": "i60", "cmd": "Push rejected? pull first", "desc": "git pull origin main --rebase then git push.", "type": "concept" },
+        { "id": "i61", "cmd": "Docker failing? check Docker Desktop first", "desc": "Don't debug your files before confirming Docker is actually running.", "type": "concept" },
+        { "id": "i62", "cmd": "npm start needs package.json", "desc": "If package.json is missing, npm has nothing to run.", "type": "concept" },
+        { "id": "i63", "cmd": "node_modules is local junk, not source code", "desc": "Keep it out of Git with .gitignore.", "type": "concept" }
+      ]
+    }
+  ]
+}

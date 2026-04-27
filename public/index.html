@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedro's Cheatsheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #0d1117;
+      --bg2:      #161b27;
+      --bg3:      #1e2535;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.12);
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --muted2:   #6b7280;
+      --c-green:  #22c55e;
+      --c-blue:   #3b82f6;
+      --c-amber:  #f59e0b;
+      --c-red:    #ef4444;
+      --c-purple: #a855f7;
+      --c-cyan:   #06b6d4;
+      --sidebar:  240px;
+      --radius:   10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: rgba(13,17,23,0.95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 20px;
+      z-index: 100;
+    }
+
+    .topbar-logo {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .topbar-logo span { color: var(--c-green); }
+
+    .topbar-stats {
+      font-size: 12px;
+      color: var(--muted2);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      max-width: 480px;
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted2);
+      pointer-events: none;
+    }
+
+    #searchInput {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 8px 12px 8px 38px;
+      font-size: 13px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s;
+    }
+
+    #searchInput:focus { border-color: var(--c-blue); }
+    #searchInput::placeholder { color: var(--muted2); }
+
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: 56px;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar);
+      flex-shrink: 0;
+      position: fixed;
+      top: 56px;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+      padding: 16px 0 80px;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+    .sidebar-label {
+      padding: 4px 16px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted2);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background 0.12s;
+      user-select: none;
+      color: var(--muted);
+      font-size: 13px;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover { background: var(--bg2); color: var(--text); }
+
+    .nav-item.active {
+      background: var(--bg2);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .nav-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .nav-count {
+      font-size: 11px;
+      color: var(--muted2);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sidebar-add {
+      margin: 8px 12px 0;
+      width: calc(100% - 24px);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      padding: 24px 28px 80px;
+      min-width: 0;
+    }
+
+    /* ── SECTION CARD ── */
+    .section-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .section-card.hidden { display: none; }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .card-head-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-accent {
+      width: 4px;
+      height: 32px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .card-title-block { min-width: 0; }
+
+    .card-subtitle {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 2px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      background: var(--bg3);
+    }
+
+    .card-head-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* ── ITEMS ── */
+    .items-list { padding: 4px 0; }
+
+    .item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+      position: relative;
+    }
+
+    .item-row:last-child { border-bottom: none; }
+    .item-row:hover { background: rgba(255,255,255,0.02); }
+    .item-row:hover .item-actions { opacity: 1; }
+
+    .item-type-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .item-body { flex: 1; min-width: 0; }
+
+    .item-cmd {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text);
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .item-row.type-concept .item-cmd {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .item-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.1s;
+      flex-shrink: 0;
+      align-items: flex-start;
+      padding-top: 2px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border2);
+      background: var(--bg3);
+      color: var(--muted);
+      transition: all 0.12s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn:hover { color: var(--text); border-color: var(--border2); background: rgba(255,255,255,0.06); }
+
+    .btn-icon {
+      padding: 5px 7px;
+      border-radius: 6px;
+    }
+
+    .btn-primary {
+      background: var(--c-blue);
+      border-color: var(--c-blue);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #2563eb; border-color: #2563eb; color: #fff; }
+
+    .btn-danger { color: var(--c-red); }
+    .btn-danger:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--c-red); }
+
+    .btn-green { color: var(--c-green); }
+    .btn-green:hover { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); color: var(--c-green); }
+
+    .copy-btn.copied { color: var(--c-green) !important; border-color: rgba(34,197,94,0.3) !important; }
+
+    .add-item-row {
+      padding: 8px 18px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* ── MODAL ── */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-bg.open { display: flex; }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      padding: 24px;
+      width: 100%;
+      max-width: 520px;
+      margin: 20px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    .modal h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .field { margin-bottom: 16px; }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.15s;
+      resize: vertical;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--c-blue);
+    }
+
+    .field textarea { min-height: 72px; }
+
+    .field select option { background: var(--bg2); }
+
+    .type-toggle {
+      display: flex;
+      gap: 8px;
+    }
+
+    .type-opt {
+      flex: 1;
+      padding: 8px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border2);
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.12s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .type-opt.active {
+      border-color: var(--c-blue);
+      background: rgba(59,130,246,0.12);
+      color: var(--c-blue);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    /* ── SECTION MODAL ── */
+    .color-picker {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.12s;
+    }
+
+    .color-swatch.active { border-color: #fff; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted2);
+    }
+
+    .empty-state.show { display: block; }
+    .empty-state p { margin-top: 8px; font-size: 13px; }
+
+    /* ── COLOR HELPERS ── */
+    .color-green  { background: var(--c-green); }
+    .color-blue   { background: var(--c-blue); }
+    .color-amber  { background: var(--c-amber); }
+    .color-red    { background: var(--c-red); }
+    .color-purple { background: var(--c-purple); }
+    .color-cyan   { background: var(--c-cyan); }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 16px; }
+      .topbar-stats { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-logo">Pedro's <span>Cheatsheet</span></div>
+  <div class="topbar-stats" id="statsText">loading…</div>
+  <div class="search-wrap">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="searchInput" type="text" placeholder="Search commands…" autocomplete="off" />
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-label">Sections</div>
+    <div id="navList"></div>
+    <div style="padding: 12px 12px 0;">
+      <button class="btn btn-green sidebar-add" id="addSectionBtn">+ New section</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main" id="mainContent">
+    <div id="sectionsContainer"></div>
+    <div class="empty-state" id="emptyState">
+      <div style="font-size:32px;">🔍</div>
+      <p>No results. Try a different search.</p>
+    </div>
+  </main>
+
+</div>
+
+<!-- ITEM MODAL -->
+<div class="modal-bg" id="itemModal">
+  <div class="modal">
+    <h3 id="itemModalTitle">Add command</h3>
+    <div class="field">
+      <label>Command / Title</label>
+      <input id="itemCmd" type="text" placeholder="e.g. git status" />
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="itemDesc" placeholder="What does it do?"></textarea>
+    </div>
+    <div class="field">
+      <label>Type</label>
+      <div class="type-toggle">
+        <button class="type-opt active" data-type="command" id="typeCmd">Command (copyable)</button>
+        <button class="type-opt" data-type="concept" id="typeConcept">Concept / note</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="itemCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="itemSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION MODAL -->
+<div class="modal-bg" id="sectionModal">
+  <div class="modal">
+    <h3 id="sectionModalTitle">New section</h3>
+    <div class="field">
+      <label>Title</label>
+      <input id="secTitle" type="text" placeholder="e.g. Git — Basics" />
+    </div>
+    <div class="field">
+      <label>Subtitle</label>
+      <input id="secSubtitle" type="text" placeholder="e.g. Version control" />
+    </div>
+    <div class="field">
+      <label>Tag (for filtering)</label>
+      <input id="secTag" type="text" placeholder="e.g. git" />
+    </div>
+    <div class="field">
+      <label>Accent colour</label>
+      <div class="color-picker" id="colorPicker">
+        <div class="color-swatch color-green active" data-color="green"></div>
+        <div class="color-swatch color-blue" data-color="blue"></div>
+        <div class="color-swatch color-amber" data-color="amber"></div>
+        <div class="color-swatch color-red" data-color="red"></div>
+        <div class="color-swatch color-purple" data-color="purple"></div>
+        <div class="color-swatch color-cyan" data-color="cyan"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="secCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="secSaveBtn">Save section</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── STATE ──
+  let data = { sections: [] };
+  let editItemState = null;  // { sectionId, itemId } or null (new)
+  let editSectionState = null;
+  let itemType = 'command';
+  let selectedColor = 'green';
+
+  const COLORS = {
+    green:  '#22c55e',
+    blue:   '#3b82f6',
+    amber:  '#f59e0b',
+    red:    '#ef4444',
+    purple: '#a855f7',
+    cyan:   '#06b6d4',
+  };
+
+  // ── UTILS ──
+  function uid() {
+    return Math.random().toString(36).slice(2, 10);
+  }
+
+  function colorVar(c) {
+    return COLORS[c] || COLORS.blue;
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function totalItems() {
+    return data.sections.reduce((n, s) => n + s.items.length, 0);
+  }
+
+  // ── FETCH / SAVE ──
+  async function loadData() {
+    const res = await fetch('/api/data');
+    data = await res.json();
+    render();
+  }
+
+  async function saveData() {
+    await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  }
+
+  // ── RENDER ──
+  function render() {
+    renderSidebar();
+    renderSections();
+    updateStats();
+  }
+
+  function updateStats() {
+    const n = totalItems();
+    const s = data.sections.length;
+    document.getElementById('statsText').textContent = `${n} commands · ${s} sections`;
+  }
+
+  function renderSidebar() {
+    const nav = document.getElementById('navList');
+    nav.innerHTML = '';
+
+    const all = document.createElement('button');
+    all.className = 'nav-item active';
+    all.dataset.filter = 'all';
+    all.innerHTML = `
+      <span class="nav-dot" style="background:rgba(255,255,255,0.2)"></span>
+      <span class="nav-name">All</span>
+      <span class="nav-count">${totalItems()}</span>
+    `;
+    all.addEventListener('click', () => setFilter('all', all));
+    nav.appendChild(all);
+
+    const tags = [...new Set(data.sections.map(s => s.tag))];
+    tags.forEach(tag => {
+      const count = data.sections
+        .filter(s => s.tag === tag)
+        .reduce((n, s) => n + s.items.length, 0);
+      const color = data.sections.find(s => s.tag === tag)?.color || 'blue';
+      const btn = document.createElement('button');
+      btn.className = 'nav-item';
+      btn.dataset.filter = tag;
+      btn.innerHTML = `
+        <span class="nav-dot" style="background:${colorVar(color)}"></span>
+        <span class="nav-name">${esc(tag)}</span>
+        <span class="nav-count">${count}</span>
+      `;
+      btn.addEventListener('click', () => setFilter(tag, btn));
+      nav.appendChild(btn);
+    });
+  }
+
+  let activeFilter = 'all';
+
+  function setFilter(tag, btnEl) {
+    activeFilter = tag;
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+    applySearch();
+  }
+
+  function renderSections() {
+    const container = document.getElementById('sectionsContainer');
+    container.innerHTML = '';
+    data.sections.forEach(sec => {
+      container.appendChild(buildSectionCard(sec));
+    });
+    applySearch();
+  }
+
+  function buildSectionCard(sec) {
+    const card = document.createElement('article');
+    card.className = 'section-card';
+    card.id = `sec-${sec.id}`;
+    card.dataset.tag = sec.tag;
+
+    card.innerHTML = `
+      <div class="card-head">
+        <div class="card-head-left">
+          <div class="card-accent color-${sec.color}"></div>
+          <div class="card-title-block">
+            <div class="card-subtitle">${esc(sec.subtitle || '')}</div>
+            <div class="card-title">${esc(sec.title)}</div>
+          </div>
+          <span class="card-tag">${esc(sec.tag)}</span>
+        </div>
+        <div class="card-head-actions">
+          <button class="btn btn-icon" title="Edit section" data-edit-sec="${sec.id}">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn btn-icon btn-danger" title="Delete section" data-del-sec="${sec.id}">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="items-list" id="items-${sec.id}">
+        ${sec.items.map(item => buildItemHTML(sec, item)).join('')}
+      </div>
+      <div class="add-item-row">
+        <button class="btn btn-green" data-add-item="${sec.id}">+ Add command</button>
+      </div>
+    `;
+
+    // Events
+    card.querySelector(`[data-edit-sec]`).addEventListener('click', () => openEditSection(sec.id));
+    card.querySelector(`[data-del-sec]`).addEventListener('click', () => deleteSection(sec.id));
+    card.querySelector(`[data-add-item]`).addEventListener('click', () => openAddItem(sec.id));
+    card.querySelectorAll('[data-copy-item]').forEach(btn => {
+      btn.addEventListener('click', () => copyItem(btn));
+    });
+    card.querySelectorAll('[data-edit-item]').forEach(btn => {
+      btn.addEventListener('click', () => openEditItem(sec.id, btn.dataset.editItem));
+    });
+    card.querySelectorAll('[data-del-item]').forEach(btn => {
+      btn.addEventListener('click', () => deleteItem(sec.id, btn.dataset.delItem));
+    });
+
+    return card;
+  }
+
+  function buildItemHTML(sec, item) {
+    const isConcept = item.type === 'concept';
+    const copyBtn = isConcept ? '' : `
+      <button class="btn btn-icon copy-btn" data-copy-item="${item.id}" data-cmd="${esc(item.cmd)}" title="Copy">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>`;
+
+    return `
+      <div class="item-row type-${item.type}" data-item-id="${item.id}">
+        <div class="item-type-dot" style="background:${isConcept ? 'rgba(255,255,255,0.15)' : colorVar(sec.color)}"></div>
+        <div class="item-body">
+          <span class="item-cmd">${esc(item.cmd)}</span>
+          <div class="item-desc">${esc(item.desc)}</div>
+        </div>
+        <div class="item-actions">
+          ${copyBtn}
+          <button class="btn btn-icon" data-edit-item="${item.id}" title="Edit">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn btn-icon btn-danger" data-del-item="${item.id}" title="Delete">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>`;
+  }
+
+  // ── SEARCH / FILTER ──
+  function applySearch() {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    let visible = 0;
+
+    data.sections.forEach(sec => {
+      const card = document.getElementById(`sec-${sec.id}`);
+      if (!card) return;
+
+      const tagMatch = activeFilter === 'all' || sec.tag === activeFilter;
+      if (!tagMatch) { card.classList.add('hidden'); return; }
+
+      if (!q) {
+        card.classList.remove('hidden');
+        card.querySelectorAll('.item-row').forEach(r => r.style.display = '');
+        visible++;
+        return;
+      }
+
+      let sectionVisible = false;
+      card.querySelectorAll('.item-row').forEach(row => {
+        const id = row.dataset.itemId;
+        const item = sec.items.find(i => i.id === id);
+        const match = item && (item.cmd.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q));
+        row.style.display = match ? '' : 'none';
+        if (match) sectionVisible = true;
+      });
+
+      if (sectionVisible || sec.title.toLowerCase().includes(q)) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('emptyState').classList.toggle('show', visible === 0);
+  }
+
+  // ── COPY ──
+  function copyItem(btn) {
+    const text = btn.dataset.cmd;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.classList.add('copied');
+      btn.title = 'Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.title = 'Copy'; }, 1200);
+    });
+  }
+
+  // ── ITEM MODAL ──
+  function setItemType(t) {
+    itemType = t;
+    document.getElementById('typeCmd').classList.toggle('active', t === 'command');
+    document.getElementById('typeConcept').classList.toggle('active', t === 'concept');
+  }
+
+  function openAddItem(sectionId) {
+    editItemState = { sectionId, itemId: null };
+    document.getElementById('itemModalTitle').textContent = 'Add command';
+    document.getElementById('itemCmd').value = '';
+    document.getElementById('itemDesc').value = '';
+    setItemType('command');
+    document.getElementById('itemModal').classList.add('open');
+    document.getElementById('itemCmd').focus();
+  }
+
+  function openEditItem(sectionId, itemId) {
+    const sec = data.sections.find(s => s.id === sectionId);
+    const item = sec?.items.find(i => i.id === itemId);
+    if (!item) return;
+    editItemState = { sectionId, itemId };
+    document.getElementById('itemModalTitle').textContent = 'Edit command';
+    document.getElementById('itemCmd').value = item.cmd;
+    document.getElementById('itemDesc').value = item.desc;
+    setItemType(item.type);
+    document.getElementById('itemModal').classList.add('open');
+    document.getElementById('itemCmd').focus();
+  }
+
+  function closeItemModal() {
+    document.getElementById('itemModal').classList.remove('open');
+    editItemState = null;
+  }
+
+  document.getElementById('itemCancelBtn').addEventListener('click', closeItemModal);
+  document.getElementById('typeCmd').addEventListener('click', () => setItemType('command'));
+  document.getElementById('typeConcept').addEventListener('click', () => setItemType('concept'));
+
+  document.getElementById('itemSaveBtn').addEventListener('click', () => {
+    const cmd = document.getElementById('itemCmd').value.trim();
+    const desc = document.getElementById('itemDesc').value.trim();
+    if (!cmd) return;
+
+    const { sectionId, itemId } = editItemState;
+    const sec = data.sections.find(s => s.id === sectionId);
+
+    if (itemId) {
+      const item = sec.items.find(i => i.id === itemId);
+      item.cmd = cmd;
+      item.desc = desc;
+      item.type = itemType;
+    } else {
+      sec.items.push({ id: uid(), cmd, desc, type: itemType });
+    }
+
+    closeItemModal();
+    saveData();
+    render();
+  });
+
+  // ── DELETE ITEM ──
+  function deleteItem(sectionId, itemId) {
+    const sec = data.sections.find(s => s.id === sectionId);
+    sec.items = sec.items.filter(i => i.id !== itemId);
+    saveData();
+    render();
+  }
+
+  // ── SECTION MODAL ──
+  function setSelectedColor(c) {
+    selectedColor = c;
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.toggle('active', s.dataset.color === c);
+    });
+  }
+
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.addEventListener('click', () => setSelectedColor(s.dataset.color));
+  });
+
+  function openAddSection() {
+    editSectionState = null;
+    document.getElementById('sectionModalTitle').textContent = 'New section';
+    document.getElementById('secTitle').value = '';
+    document.getElementById('secSubtitle').value = '';
+    document.getElementById('secTag').value = '';
+    setSelectedColor('green');
+    document.getElementById('sectionModal').classList.add('open');
+    document.getElementById('secTitle').focus();
+  }
+
+  function openEditSection(sectionId) {
+    const sec = data.sections.find(s => s.id === sectionId);
+    if (!sec) return;
+    editSectionState = sectionId;
+    document.getElementById('sectionModalTitle').textContent = 'Edit section';
+    document.getElementById('secTitle').value = sec.title;
+    document.getElementById('secSubtitle').value = sec.subtitle || '';
+    document.getElementById('secTag').value = sec.tag;
+    setSelectedColor(sec.color);
+    document.getElementById('sectionModal').classList.add('open');
+    document.getElementById('secTitle').focus();
+  }
+
+  function closeSectionModal() {
+    document.getElementById('sectionModal').classList.remove('open');
+    editSectionState = null;
+  }
+
+  document.getElementById('addSectionBtn').addEventListener('click', openAddSection);
+  document.getElementById('secCancelBtn').addEventListener('click', closeSectionModal);
+
+  document.getElementById('secSaveBtn').addEventListener('click', () => {
+    const title = document.getElementById('secTitle').value.trim();
+    const subtitle = document.getElementById('secSubtitle').value.trim();
+    const tag = document.getElementById('secTag').value.trim();
+    if (!title) return;
+
+    if (editSectionState) {
+      const sec = data.sections.find(s => s.id === editSectionState);
+      sec.title = title;
+      sec.subtitle = subtitle;
+      sec.tag = tag;
+      sec.color = selectedColor;
+    } else {
+      data.sections.push({
+        id: uid(),
+        title,
+        subtitle,
+        tag: tag || 'misc',
+        color: selectedColor,
+        items: [],
+      });
+    }
+
+    closeSectionModal();
+    saveData();
+    render();
+  });
+
+  // ── DELETE SECTION ──
+  function deleteSection(sectionId) {
+    const sec = data.sections.find(s => s.id === sectionId);
+    if (!confirm(`Delete "${sec.title}" and all its commands?`)) return;
+    data.sections = data.sections.filter(s => s.id !== sectionId);
+    saveData();
+    render();
+  }
+
+  // ── SEARCH INPUT ──
+  document.getElementById('searchInput').addEventListener('input', applySearch);
+
+  // ── KEYBOARD SHORTCUT: / to focus search ──
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+    if (e.key === 'Escape') {
+      closeItemModal();
+      closeSectionModal();
+    }
+  });
+
+  // ── CLOSE MODAL ON BG CLICK ──
+  document.getElementById('itemModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeItemModal();
+  });
+  document.getElementById('sectionModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeSectionModal();
+  });
+
+  // ── INIT ──
+  loadData();
+</script>
+</body>
+</html>
