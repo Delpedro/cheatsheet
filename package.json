@@ -1,0 +1,8 @@
+{
+  "name": "cheatsheet",
+  "version": "2.0.0",
+  "description": "Pedro's dev cheatsheet — Supabase + GitHub Pages",
+  "scripts": {
+    "start": "npx live-server --port=3000 --open=index.html"
+  }
+}
